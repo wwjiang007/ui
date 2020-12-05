@@ -14,10 +14,11 @@
        groupByKey="projectId"
        groupByRef="project"
        headers=headers
-       sortGroupedFirst=true
        bulkActions=true
        body=allNamespace
+       descending=descending
        sortBy=sortBy
+       extraSearchFields=extraSearchFields
        as |sortable kind obj dt|
   }}
     {{#if (eq kind "row")}}
@@ -30,8 +31,14 @@
         </td>
         <td>
           {{obj.name}}
+          {{#if obj.autoInjectionEnabled}}
+            <div class="istio istio-autoinjection"></div>
+          {{/if}}
+          {{#if obj.description}}
+            <p class="text-small text-muted m-0">{{linkify obj.description}}</p>
+          {{/if}}
         </td>
-        <td>
+        <td data-title="{{dt.created}}" class="text-right pr-20">
           {{date-calendar obj.created}}
         </td>
         <td data-title="{{t 'generic.actions'}}:" class="actions">
@@ -39,10 +46,13 @@
         </td>
       </tr>
     {{else if (eq kind "group")}}
-      {{#if obj.ref}}
+      {{#if obj.ref.type}}
         <tr class="group-row">
           <td colspan="{{sortable.fullColspan}}" class="pl-10">
             {{t 'projectsListNamespacePage.current'}}
+            {{#if obj.ref.description}}
+              <p class="text-small text-muted m-0">{{linkify obj.ref.description}}</p>
+            {{/if}}
           </td>
         </tr>
       {{else}}

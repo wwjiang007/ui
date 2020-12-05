@@ -1,13 +1,4 @@
 <section>
-  <h2>
-    <b class="text-warning">{{t 'authPage.shibboleth.enabled.header' providerName=(t providerName)}}</b>
-  </h2>
-  <div>
-    {{t (concat 'authPage.shibboleth.enabled.' model.accessMode) appName=settings.appName providerName=(t providerName) users=numUsers orgs=numOrgs}}
-  </div>
-</section>
-
-<section>
   <div class="row">
     <h3>{{t 'authPage.shibboleth.enabled.authenticated.header.text'}}</h3>
     <hr/>
@@ -44,11 +35,11 @@
   </p>
 
   {{#if confirmDisable}}
-    <button class="btn bg-error" {{action "disable"}}>
+    <button class="btn bg-error" type="button" {{action "disable"}}>
       <i class="icon icon-alert"></i> {{t 'authPage.shibboleth.enabled.disableAccess.confirmDisable'}}
     </button>
   {{else}}
-    <button class="btn bg-error" {{action "promptDisable"}}>
+    <button class="btn bg-error" type="button" {{action "promptDisable"}}>
       <i class="icon icon-umbrella"></i> {{t 'authPage.shibboleth.enabled.disableAccess.disable'}}
     </button>
   {{/if}}

@@ -20,15 +20,15 @@
   @include clearfix;
 }
 
-.affix {
-  position: fixed;
-}
-
 .pull-right {
   float: right !important;
 }
 .pull-left {
   float: left !important;
+}
+
+.justify-left {
+  justify-content: left !important;
 }
 
 /**
@@ -74,6 +74,10 @@
   width: 1px;
 }
 
+.text-vertical-top {
+  vertical-align: text-top !important;
+}
+
 .text-left {
   text-align: left !important;
 }
@@ -88,6 +92,7 @@
 
 .text-small {
   font-size: .8em;
+  line-height: 1em;
 }
 
 .text-normal {
@@ -104,6 +109,10 @@
 
 .text-uppercase {
   text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
 }
 
 .text-capitalize {
@@ -124,9 +133,34 @@
   display: block !important;
 }
 
+.flex {
+  display:flex;
+}
+
+.center {
+  display:flex !important;
+  justify-content:center;
+  align-items: center;
+}
+
+.inline{
+  display: inline;
+}
 
 .inline-block {
   display: inline-block !important;
+}
+
+.initial-width {
+  width: initial !important;
+}
+
+.vertical-top {
+  vertical-align: top;
+}
+
+.vertical-bottom {
+  vertical-align: bottom;
 }
 
 .table-cell {
@@ -180,6 +214,11 @@
   white-space: normal;
 }
 
+.list-small {
+  line-height: 14px;
+  padding: 0 0 0 22px;
+  margin: 0;
+}
 .list-unstyled { @include list-unstyled }
 .no-select { @include no-select }
 .no-resize { @include no-resize }
@@ -261,10 +300,10 @@
   border-radius: 50%;
 }
 
-
 .comma-list {
   span:after {
-    content: ','
+    content: ',';
+    margin-left: -5px;
   }
   span:last-of-type:after {
     content: ''
@@ -273,5 +312,32 @@
 }
 
 .link[disabled] {
+  pointer-events: none;
+}
+
+a.disabled {
+  cursor: default;
+  transition: ease-in-out all .25s;
+}
+
+.sticky {
+  position: sticky;
+  top: 0px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+.select-algin-checkbox {
+  margin-top: 3px;
+}
+
+.no-outline {
+  outline: 0;
+  &:focus {
+    outline: 0 !important;
+  }
+}
+
+.pointer-events-none {
   pointer-events: none;
 }

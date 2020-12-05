@@ -1,0 +1,53 @@
+{{#sortable-table
+     body=rows
+     descending=descending
+     headers=headers
+     paging=paging
+     pagingLabel="pagination.catalog"
+     rightActions=rightActions
+     sortBy=sortBy
+     classNames="grid sortable-table bordered"
+     as |sortable kind row dt|
+}}
+  {{#if (eq kind "row")}}
+    <tr class="main-row {{unless row.id "text-muted"}}">
+      <td class="row-check" valign="middle" style="padding-top: 2px;">
+        {{check-box nodeId=row.id}}
+      </td>
+      <td data-title="{{dt.state}}" class="state">
+        {{badge-state model=row}}
+      </td>
+      <td data-title="{{dt.scope}}" class="state">
+        {{#if row.clusterId}}
+          {{t "catalogSettings.currentCluster"}}
+        {{else if row.projectId}}
+          {{t "catalogSettings.currentProject"}}
+        {{else}}
+          {{t "catalogSettings.globalCatalog"}}
+        {{/if}}
+      </td>
+      <td data-title="{{dt.name}}">
+        {{row.name}}
+        {{#if row.isHelm3}}
+          <img class="helm-version-3 vertical-middle" src="{{app.baseAssets}}assets/images/logos/helm-v3.svg" />
+        {{/if}}
+      </td>
+      <td data-title="{{dt.url}}">
+        {{row.url}}
+      </td>
+      <td data-title="{{dt.branch}}">
+        {{row.branch}}
+      </td>
+      <td data-title="{{dt.actions}}" class="actions">
+        {{action-menu model=row}}
+      </td>
+    </tr>
+    {{#if row.showTransitioningMessage}}
+      {{error-sub-row fullColspan=sortable.fullColspan model=row}}
+    {{/if}}
+  {{else if (eq kind "nomatch")}}
+    <tr><td colspan="{{sortable.fullColspan}}" class="text-center text-muted pt-20 pb-20">{{t "catalogSettings.more.noMatch"}}</td></tr>
+  {{else if (eq kind "norows")}}
+    <tr><td colspan="{{sortable.fullColspan}}" class="text-center text-muted pt-20 pb-20">{{t "catalogSettings.more.noData"}}</td></tr>
+  {{/if}}
+{{/sortable-table}}

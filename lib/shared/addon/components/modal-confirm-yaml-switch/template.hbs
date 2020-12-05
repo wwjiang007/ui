@@ -1,0 +1,27 @@
+<div class="container-header-text">
+  <h3>
+    {{t "modalConfirmYaml2Form.header"}}:
+  </h3>
+  <div class="protip">
+    {{t "modalConfirmYaml2Form.helpText"}}
+  </div>
+  <hr/>
+  <div class="display-name">
+    {{#each model as |row|}}
+      <div class="mb-5">
+        <code>
+          {{row.lostKey}}: {{row.lostValue}}
+        </code>
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<div class="footer-actions">
+  <button class="btn bg-error" type="button" {{action "confirm"}}>
+    {{t "modalConfirmYaml2Form.confirm"}}
+  </button>
+  <button class="btn bg-transparent" type="button" {{action "cancel"}}>
+    {{t "generic.cancel"}}
+  </button>
+</div>

@@ -1,139 +1,177 @@
 import { get, set, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Resource from 'ember-api-store/models/resource';
+import Resource from '@rancher/ember-api-store/models/resource';
+import C from 'ui/utils/constants';
 
 const SOURCES = [];
-//             name/component    field                     component ephemeral persistent driver
-registerSource('aws-ebs',        'awsElasticBlockStore',   true,     true,     true);
-registerSource('azure-disk',     'azureDisk',              true,     true,     true);
-registerSource('azure-file',     'azureFile',              true,     true,     true);
-registerSource('cephfs',         'cephfs',                 true,     true,     true);
-registerSource('cinder',         'cinder',                 true,     true,     true);
-registerSource('config-map',     'configMap',              true,     false,    false);
-//registerSource('downward-api',   'downwardAPI',            true,     true,     false);
-registerSource('empty-dir',      'emptyDir',               true,     true,     false);
-registerSource('fc',             'fc',                     true,     true,     true);
-registerSource('flex-volume',    'flexVolume',             true,     true,     true);
-registerSource('flex-volume-longhorn',    'flexVolume',    true,     true,     true,    'rancher.io/longhorn');
-registerSource('flocker',        'flocker',                true,     true,     true);
-registerSource('gce-pd',         'gcePersistentDisk',      true,     true,     true);
-//registerSource('git-repo',       'gitRepo',                true,     true,     false);
-registerSource('glusterfs',      'glusterfs',              true,     true,     true);
-registerSource('host-path',      'hostPath',               true,     true,     true);
-registerSource('iscsi',          'iscsi',                  true,     true,     true);
-registerSource('local',          'local',                  true,     false,    true);
-registerSource('nfs',            'nfs',                    true,     true,     true);
-//registerSource('pvc',            'persisitentVolumeClaim', true,     true,     false);
-registerSource('photon',         'photonPersistentDisk',   true,     true,     true);
-registerSource('portworx',       'portworxVolume',         true,     true,     true);
-//registerSource('projected',      'projected',              true,     true,     false);
-registerSource('quobyte',        'quobyte',                true,     true,     true);
-registerSource('rbd',            'rbd',                    true,     true,     true);
-registerSource('scaleio',        'scaleIO',                true,     true,     true);
-registerSource('secret',         'secret',                 true,     true,     false);
-registerSource('storageos',      'storageos',              true,     true,     true);
-registerSource('vsphere-volume', 'vsphereVolume',          true,     true,     true);
 
-export function registerSource(name, field, component, ephemeral=true, persistent=true, driver='') {
+//             name/component    field                     component ephemeral persistent supported driver
+registerSource('aws-ebs',             'awsElasticBlockStore',   true, true,  true,  true);
+registerSource('azure-disk',          'azureDisk',              true, true,  true,  true);
+registerSource('azure-file',          'azureFile',              true, true,  true,  true);
+registerSource('csi',                 'csi',                    true, true,  true,  false);
+registerSource('cephfs',              'cephfs',                 true, true,  true,  false);
+registerSource('cinder',              'cinder',                 true, true,  true,  false);
+registerSource('config-map',          'configMap',              true, false, false, false);
+// registerSource('downward-api',     'downwardAPI',            true, true,  false, false);
+registerSource('empty-dir',           'emptyDir',               true, true,  false, false);
+registerSource('fc',                  'fc',                     true, true,  true,  false);
+registerSource('flex-volume',         'flexVolume',             true, true,  true,  false);
+registerSource('csi-volume-longhorn', 'csi',                    true, true,  true,  true, C.STORAGE.LONGHORN_PROVISIONER_KEY);
+registerSource('flocker',             'flocker',                true, true,  true,  false);
+registerSource('gce-pd',              'gcePersistentDisk',      true, true,  true,  true);
+// registerSource('git-repo',         'gitRepo',                true, true,  false, false);
+registerSource('glusterfs',           'glusterfs',              true, true,  true,  false);
+registerSource('host-path',           'hostPath',               true, true,  true,  true);
+registerSource('iscsi',               'iscsi',                  true, true,  true,  false);
+registerSource('local',               'local',                  true, false, true,  true);
+registerSource('nfs',                 'nfs',                    true, true,  true,  true);
+// registerSource('pvc',              'persisitentVolumeClaim', true, true,  false, false);
+registerSource('photon',              'photonPersistentDisk',   true, true,  true,  false);
+registerSource('portworx',            'portworxVolume',         true, true,  true,  false);
+// registerSource('projected',        'projected',              true, true,  false, false);
+registerSource('quobyte',             'quobyte',                true, true,  true,  false);
+registerSource('rbd',                 'rbd',                    true, true,  true,  false);
+registerSource('scaleio',             'scaleIO',                true, true,  true,  false);
+registerSource('secret',              'secret',                 true, true,  false, false);
+registerSource('storageos',           'storageos',              true, true,  true,  false);
+registerSource('vsphere-volume',      'vsphereVolume',          true, true,  true,  true);
+
+export function registerSource(name, field, component, ephemeral = true, persistent = true, supported = false, driver = '') {
   if ( component === true ) {
     component = name;
   }
 
   const existing = SOURCES.findBy('name', name);
+
   if ( existing ) {
     SOURCES.removeObject(existing);
   }
 
   SOURCES.push({
-    name: name,
-    value: field,
+    name,
+    value:      field,
     driver,
-    component: component,
-    ephemeral: !!ephemeral,
+    component,
+    ephemeral:  !!ephemeral,
     persistent: !!persistent,
+    supported:  !!supported,
   });
 }
 
-export function getSources(which='all') {
+export function getSources(which = 'all') {
   if (which === 'ephemeral') {
-    return JSON.parse(JSON.stringify(SOURCES.filter(s => s.ephemeral)));
+    return JSON.parse(JSON.stringify(SOURCES.filter((s) => s.ephemeral)));
   } else if ( which === 'persistent' ) {
-    return JSON.parse(JSON.stringify(SOURCES.filter(s => s.persistent)));
+    return JSON.parse(JSON.stringify(SOURCES.filter((s) => s.persistent)));
   } else {
     return JSON.parse(JSON.stringify(SOURCES));
   }
 }
 
 var Volume = Resource.extend({
-  intl: service(),
+  intl:         service(),
   reservedKeys: ['configName'],
+  sources:      SOURCES,
 
   type: 'volume',
 
-  init() {
-    this._super(...arguments);
+  configName: computed('sources.@each.value', 'state', function() {
+    const keys = get(this, 'sources').map((x) => x.value);
 
-    const keys = SOURCES.map(x => x.value);
-
-    set(this, 'configName', computed.call(this, ...keys, function() {
-      for ( let key, i = 0 ; i < keys.length ; i++ ) {
-        key = keys[i];
-        if ( get(this,key) ) {
-          return key;
-        }
+    for ( let key, i = 0 ; i < keys.length ; i++ ) {
+      key = keys[i];
+      if ( get(this, key) ) {
+        return key;
       }
+    }
 
-      return null;
-    }));
-  },
+    return null;
+  }),
 
   config: computed('configName', function() {
     const key = get(this, 'configName');
+
     if ( key ) {
       return get(this, key);
     }
+
+    return;
   }),
-  sourceName: computed('configName', function(){
+
+  sourceName: computed('configName', 'sources', function(){
     const key = get(this, 'configName');
+
     if ( !key ) {
-      return
+      return;
     }
+
     let entry;
-    let driver = get(this, key).driver;
-    entry = SOURCES.findBy('value', key);
-    if(key === 'flexVolume' && driver){
-      let specialSource = SOURCES.findBy('driver', driver);
-      if(specialSource){
+    let driver    = get(this, key).driver;
+    const sources = get(this, 'sources');
+
+    entry = sources.findBy('value', key);
+
+    if (key === 'flexVolume' && driver){
+      let specialSource = sources.findBy('driver', driver);
+
+      if (specialSource){
         entry = specialSource;
       }
     }
-    if(entry){
+
+    if (entry){
       return entry.name;
     }
+
+    return;
   }),
-  displaySource: computed('sourceName','intl.locale', function() {
-    const intl = get(this, 'intl');
+
+  displaySource: computed('csi.driver', 'intl.locale', 'sourceName', function() {
+    const intl       = get(this, 'intl');
     const sourceName = get(this, 'sourceName');
-    if ( sourceName ) {
-      return intl.t(`volumeSource.${sourceName}.title`);
+
+    if ( sourceName === 'csi' ) {
+      return get(this, 'csi.driver')
+    } else {
+      return intl.t(`volumeSource.${ sourceName }.title`);
     }
   }),
 
   clearSourcesExcept(keep) {
-    const keys = SOURCES.map(x => x.value);
+    const keys = get(this, 'sources').map((x) => x.value);
 
     for ( let key, i = 0 ; i < keys.length ; i++ ) {
       key = keys[i];
-      if ( key !== keep && get(this,key) ) {
+      if ( key !== keep && get(this, key) ) {
         set(this, key, null);
       }
     }
+
+    if ( keep === 'csi' ) {
+      this.clearCsiSecretRef();
+    }
   },
+
+  clearCsiSecretRef() {
+    const csi = this.csi;
+
+    Object.keys(csi).filter((key) => key.endsWith('SecretRef')).forEach((key) => {
+      const ref = csi[key];
+
+      if ( !ref.name && !ref.namespace ) {
+        delete csi[key]
+      }
+    });
+  }
 });
 
 Volume.reopenClass({
   stateMap: {
-    'active':           {icon: 'icon icon-hdd',    color: 'text-success'},
+    'active':           {
+      icon:  'icon icon-hdd',
+      color: 'text-success'
+    },
   },
 });
 

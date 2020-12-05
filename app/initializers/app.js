@@ -1,6 +1,6 @@
 export function initialize(application) {
-  application.inject('service:app', 'app', 'application:main'); //inject the config into the app service to make this solution turnkey
-  application.inject('controller','app', 'service:app');
+  application.inject('service:app', 'app', 'application:main'); // inject the config into the app service to make this solution turnkey
+  application.inject('controller', 'app', 'service:app');
   application.inject('route',     'app', 'service:app');
   application.inject('view',      'app', 'service:app');
   application.inject('component', 'app', 'service:app');
@@ -10,5 +10,5 @@ export function initialize(application) {
 
 export default {
   name: 'app',
-  initialize: initialize
+  initialize
 };

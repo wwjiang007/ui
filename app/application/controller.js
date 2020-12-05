@@ -2,31 +2,26 @@ import { oneWay } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import Controller from '@ember/controller';
 import { run } from '@ember/runloop';
+import { observer } from '@ember/object';
 
 export default Controller.extend({
   settings: service(),
 
+  resourceActions:   service('resource-actions'),
+  tooltipService:    service('tooltip'),
+  router:            service(),
+
   // GitHub auth params
-  queryParams     : [/*'error_description', 'state','code', */ 'isPopup','redirectTo', 'fromAuthProvider'],
+  queryParams: ['isPopup', 'fromAuthProvider'],
 
-  resourceActions : service('resource-actions'),
-  tooltipService  : service('tooltip'),
+  error:             null,
+  error_description: null,
+  state:             null,
+  code:              null,
+  isPopup:           null,
 
-  tooltip         : oneWay('tooltipService.tooltipOpts.type'),
-  tooltipTemplate : oneWay('tooltipService.tooltipOpts.template'),
-
-  error             : null,
-  error_description : null,
-  state             : null,
-  code              : null,
-  isPopup           : null,
-  redirectTo        : null,
-
-  actions: {
-    clickedAction: function(actionName) {
-      this.get('resourceActions').triggerAction(actionName);
-    },
-  },
+  tooltip:           oneWay('tooltipService.tooltipOpts.type'),
+  tooltipTemplate:   oneWay('tooltipService.tooltipOpts.template'),
 
   init() {
     this._super(...arguments);
@@ -38,8 +33,7 @@ export default Controller.extend({
 
   // currentRouteName is set by Ember.Router
   // but getting the application controller to get it is inconvenient sometimes
-  currentRouteNameChanged: function() {
-    this.set('app.currentRouteName', this.get('currentRouteName'));
-  }.observes('currentRouteName'),
-
+  currentRouteNameChanged: observer('router.currentRouteName', function() {
+    this.set('app.currentRouteName', this.get('router.currentRouteName'));
+  }),
 });

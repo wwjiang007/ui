@@ -1,3 +1,20 @@
+.catalog-group:not(:last-child) {
+  padding-bottom: 15px;
+  border-bottom: 1px solid $border;
+  margin-bottom: 15px;
+}
+
+.catalog-group {
+  .group-name-container {
+    position: relative;
+
+    .helm-version-3 {
+      position: absolute;
+      top: -8px;
+    }
+  }
+}
+
 .launch-catalog {
   H4 {
     // font-weight: bold;
@@ -10,6 +27,16 @@
 
   .preview-content {
     padding: 5px;
+  }
+
+  .app-icon {
+    max-height:150px;
+    max-width: 100%;
+  }
+
+  .readme-content {
+    overflow-y: auto;
+    max-height: 500px;
   }
 }
 
@@ -114,4 +141,9 @@
   &.aliyunecs {
     @include aliyunecs;
   }
+}
+
+.helm-version-3 {
+  height: 40px;
+  display: inline-block;
 }

@@ -8,15 +8,16 @@ export default Route.extend({
     const original = this.modelFor('authenticated.project.dns.detail').record;
 
     return hash({
-      dnsRecords: store.findAll('dnsRecord'),
-      workloads: store.findAll('workload'),
-      record: original.clone(),
+      dnsRecords: store.findAll('service'),
+      workloads:  store.findAll('workload'),
+      record:     original.clone(),
     });
   },
 
-  setupController(controller/*, model*/) {
+  setupController(controller/* , model*/) {
     this._super(...arguments);
     const original = this.modelFor('authenticated.project.dns.detail');
-    set(controller,'originalModel', original);
+
+    set(controller, 'originalModel', original);
   }
 });

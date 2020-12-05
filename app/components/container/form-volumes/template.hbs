@@ -1,0 +1,97 @@
+{{#accordion-list-item
+  title=(t "formVolumes.title")
+  detail=(t "formVolumes.detail" appName=settings.appName)
+  status=status
+  statusClass=statusClass
+  expandAll=expandAll
+  expandOnInit=expandOnInit
+  expand=(action expandFn)
+  everExpanded=true
+}}
+  {{#if volumesArray.length}}
+    {{#each volumesArray as |row|}}
+      {{#unless row.hidden}}
+        {{container/form-volume-row
+          model=row
+          namespace=namespace
+          editing=editing
+          remove=(action "remove")
+          loggingEnabled=loggingEnabled
+          workload=workload
+        }}
+      {{/unless}}
+    {{/each}}
+  {{else if (not editing)}}
+    <div class="text-muted">
+      {{t "generic.na"}}
+    </div>
+  {{/if}}
+  {{#if editing}}
+    <BasicDropdown @horizontalPosition="left" as |dd|>
+      <dd.Trigger class="btn bg-link p-0 icon-btn pl-10">
+        <span>
+          {{t "formVolumes.add.label"}}
+        </span>
+        <span class="darken">
+          <i class="icon icon-chevron-down"></i>
+        </span>
+      </dd.Trigger>
+      <dd.Content>
+        <li {{action dd.actions.close}}>
+          <a {{action "addVolume"}}>
+            {{t "formVolumes.add.newVolume"}}
+          </a>
+        </li>
+        <li {{action dd.actions.close}}>
+          <a {{action "addNewPvc"}}>
+            {{t "formVolumes.add.newPvc"}}
+          </a>
+        </li>
+        <li {{action dd.actions.close}}>
+          <a {{action "addPvc"}}>
+            {{t "formVolumes.add.existingPvc"}}
+          </a>
+        </li>
+        <li {{action dd.actions.close}}>
+          <a {{action "addBindMount"}}>
+            {{t "formVolumes.add.bindMount"}}
+          </a>
+        </li>
+        <li class="hide">
+          <a {{action "addTmpfs"}}>
+            {{t "formVolumes.add.tmpfs"}}
+          </a>
+        </li>
+        <li {{action dd.actions.close}}>
+          <a {{action "addSecret"}}>
+            {{t "formVolumes.add.secret"}}
+          </a>
+        </li>
+        <li {{action dd.actions.close}}>
+          <a {{action "addConfigMap"}}>
+            {{t "formVolumes.add.configMap"}}
+          </a>
+        </li>
+        <li {{action dd.actions.close}}>
+          <a {{action "addCertificate"}}>
+            {{t "formVolumes.add.certificate"}}
+          </a>
+        </li>
+        {{#if (and loggingEnabled (not isWindows))}}
+          <li {{action dd.actions.close}}>
+            <a {{action "addCustomLogPath"}}>
+              {{t "formVolumes.add.customLogPath"}}
+            </a>
+          </li>
+        {{/if}}
+        {{#if isStatefulSet}}
+          <li {{action dd.actions.close}}>
+            <a {{action "addVolumeClaimTemplate"}}>
+              {{t "formVolumes.add.vct"}}
+            </a>
+          </li>
+        {{/if}}
+      </dd.Content>
+    </BasicDropdown>
+  {{/if}}
+{{/accordion-list-item}}

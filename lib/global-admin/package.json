@@ -5,13 +5,12 @@
     "ember-engine"
   ],
   "dependencies": {
-    "ember-math-helpers": "*",
-    "ember-truth-helpers": "*",
+    "ember-intl": "*",
+    "ember-auto-import": "*",
     "ember-cli-htmlbars": "*",
-    "ember-cli-babel": "*",
-    "ember-cli-clipboard": "*",
     "ember-href-to": "*",
-    "ember-concurrency": "*"
+    "ember-cli-babel": "*",
+    "ember-deep-set": "*"
   },
   "ember-addon": {
     "paths": [

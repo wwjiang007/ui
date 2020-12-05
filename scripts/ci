@@ -15,23 +15,20 @@ else
   cd `dirname $CWD`
 fi
 
-if [[ "${ENABLE_DOCKER}" == "true" ]]; then
-  wrapdocker
-fi
+echo "Cleaning Up.."
+rm -rf node_modules build dist tmp
 
-if [[ "${UPLOAD_LATEST}" == "true" ]]; then
-  docker pull google/cloud-sdk
-fi
-
-rm -rf node_modules bower_components build dist tmp
-
+echo "Bootstrapping.."
 ./scripts/bootstrap
 
+echo "Linting.."
 ./node_modules/.bin/eslint --max-warnings 0 .
 
-if [[ "${UPLOAD_LATEST}" == "true" ]] && [[ "${ENABLE_DOCKER}" == "true" ]]; then
-  ./scripts/build-static -l -u -v latest2
+if [[ "${BUILD_LATEST}" == "true" ]]; then
+  echo "Building..."
+  ./scripts/build-static -l -v latest2
   # (build-static contains a call to test & build)
 else
+  echo "Testing.."
   yarn test
 fi

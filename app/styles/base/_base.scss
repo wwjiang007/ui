@@ -32,7 +32,7 @@ $spacing-property-map: (
 body {
   direction: ltr;
   &.container-farm {
-    background: url('images/login-container-farm.svg') center center no-repeat fixed;
+    background: url('images/login-cityscape.svg') center center no-repeat fixed;
     background-size: cover;
     position: absolute;
     top: 0;
@@ -90,4 +90,8 @@ hr {
     height: 0;
     border-top: 1px solid $border;
     border-bottom: 1px solid $border;
+}
+
+.flatpickr-months .flatpickr-month {
+  height: 36px !important;
 }

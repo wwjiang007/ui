@@ -1,0 +1,45 @@
+<h2>
+  <i class="icon icon-file"></i> {{t 'containerLogs.title'}}
+  {{#if displayName}}
+    {{displayName}}
+  {{else if (gt instance.containers.length 1)}}
+    <div class="container-select">
+      {{new-select
+        classNames="form-control"
+        optionValuePath="name"
+        optionLabelPath="name"
+        content=instance.containers
+        value=containerName
+      }}
+    </div>
+  {{else}}
+     {{containerName}}
+  {{/if}}
+  <div class="console-status text-muted pull-right">{{t (concat 'containerLogs.status.' status)}}</div>
+</h2>
+{{#if showProtip}}
+  <div class="protip">
+      {{t 'containerLogs.protip' key=alternateLabel}}
+  </div>
+{{/if}}
+<pre class="log-body {{if wrapLines 'wrap-lines'}}">
+</pre>
+{{yield}}
+
+<div class="footer-actions">
+  <div class="checkbox pt-10 text-left" style="position: absolute; top: -2px">
+    <label class="block">
+      {{input type="checkbox" checked=wrapLines}}
+      {{t 'containerLogs.wrapLines'}}
+    </label>
+    <label class="block">
+      {{input type="checkbox" checked=isPrevious}}
+      {{t 'containerLogs.previous'}}
+    </label>
+  </div>
+  <button class="btn bg-default" type="button" {{action "scrollToTop"}}>{{t 'containerLogs.scrollTop'}}</button>
+  <button class="btn bg-default scroll-bottom" type="button" {{action "followLog"}}>{{t 'containerLogs.scrollBottom'}}</button>
+  <button class="btn bg-default" type="button" {{action "download"}}>{{t 'containerLogs.download'}}</button>
+  <button class="btn bg-default" type="button" {{action "clear"}}>{{t 'containerLogs.clear'}}</button>
+  <button class="btn bg-primary" type="button" {{action "cancel"}}>{{t 'generic.closeModal'}}</button>
+</div>

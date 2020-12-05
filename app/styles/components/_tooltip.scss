@@ -1,18 +1,3 @@
-// Tooltip text color
-$tooltip-color                       : white !default;
-// Tooltip background color
-$tooltip-bg                          : rgba(0,0,0,.9) !default;
-$tooltip-opacity                     : .9 !default;
-// Tooltip arrow color
-$tooltip-arrow-color                 : $tooltip-bg !default;
-
-@mixin tooltip-triangle {
-  content    : '';
-  background : transparent;
-  width      : 0;
-  height     : 0;
-  position   : absolute;
-}
 
 .tooltip-triangle {
   @include tooltip-triangle
@@ -26,16 +11,23 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
 }
 
 .container-tooltip {
+  @extend .text-small;
   display: inline-block;
   position: fixed;
-  background: $link-color;
-  padding: 5px;
-  // padding-right: 25px;
-  // min-width: 210px;
+  background: rgba($text-color,.8);
+  padding: 10px;
+  border-radius: 3px;
   max-width: 95%;
   z-index: 1000;
   color: $body-bg;
   text-align: center;
+  max-width: 350px;
+
+  a {
+    color: $body-bg;
+    text-decoration: underline;
+  }
+
 
   .btn.more-actions {
     border: none;
@@ -52,7 +44,7 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
     @include tooltip-triangle;
     border-left  : 5px solid transparent;
     border-right : 5px solid transparent;
-    border-top   : 5px solid $link-color;
+    border-top   : 5px solid rgba($text-color,.8);
     bottom       : -5px;
     left         : calc(50% - 5px);
   }
@@ -60,7 +52,7 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
     @include tooltip-triangle;
     border-left   : 5px solid transparent;
     border-right  : 5px solid transparent;
-    border-bottom : 5px solid lighten($link-color, 20);
+    border-bottom : 5px solid lighten($text-color,.8);
     top           : -5px;;
     left          : calc(50% - 5px);
   }
@@ -68,7 +60,7 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
     @include tooltip-triangle;
     border-top    : 5px solid transparent;
     border-bottom : 5px solid transparent;
-    border-right  : 5px solid $link-color;
+    border-right  : 5px solid $text-color,.8;
     left          : -5px;
     top           : calc(50% - 5px);
   }
@@ -76,7 +68,7 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
     @include tooltip-triangle;
     border-top    : 5px solid transparent;
     border-bottom : 5px solid transparent;
-    border-left   : 5px solid $link-color;
+    border-left   : 5px solid $text-color,.8;
     right         : -5px;
     top           : calc(50% - 5px);
   }
@@ -88,6 +80,12 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
 
     &::hover {
       background: lighten($primary-dark, 15%);
+    }
+
+    .icon-vertical-ellipsis {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     .icon-chevron-down {
@@ -164,6 +162,12 @@ $tooltip-arrow-color                 : $tooltip-bg !default;
       display : inline-block;
       width   : 50%;
       float   : left;
+    }
+  }
+
+  .tooltip-expire {
+    a {
+      color: $warning;
     }
   }
 

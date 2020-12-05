@@ -1,13 +1,13 @@
 // Code
-$code-color                          : $info !default;
+$code-color                          : $success !default;
 $code-bg                             : $text-color !default;
 $pre-bg                              : $text-color !default;
 $pre-color                           : $dark-grey !default;
 $pre-border-color                    : $light-grey !default;
-$setting-bg                          : rgba($light-grey, .3) !default;
+$setting-bg                          : rgba($bg-default, .3) !default;
 
 code {
-    padding: 5px 10px;
+    padding: 3px 6px;
     font-size: 85%;
     color: $code-color;
     background-color: $code-bg;
@@ -58,4 +58,21 @@ pre {
 
 .CodeMirror-scroll {
   overflow: auto !important;
+}
+
+.bg-pre-light {
+  background: #fff;
+  code {
+    color: #000;
+  }
+}
+
+.codemirror-container {
+  textarea {
+    // We can't just use display: none or visibility hidden because then the
+    // text area can't receive focus which prevents the user from editing.
+    height: 0;
+    width: 0;
+    padding: 0;
+  }
 }

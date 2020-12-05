@@ -1,81 +1,194 @@
 ---
 languageName: "Tiếng Anh"
+languageContribute: "Hỗ trợ dịch Rancher bởi namhbnam"
+##############################
+#Really generic things used in multiple places (use sparingly)
+##############################
 generic:
   actions: Tác vụ
+  active: Đang hoạt động
   activate: Kích hoạt
+  add: Thêm
+  advanced: Nâng cao
   all: Tất cả
   any: Bất kỳ
+  application: ứng dụng
+  as: như
+  back: Quay lại
   cancel: Hủy
   closeModal: Đóng
+  cluster: Cluster
+  collapse: Thu gọn
   collapseAll: Thu gọn tất cả
+  comingSoon: Sắp ra mắt
+  command: Lệnh
   confirm: Xác nhận
   containers: Containers
   created: Đã tạo
   createdDate: "Ngày tạo {date}"
+  custom: Tùy chỉnh
+  customize: Tùy chỉnh
   default: Mặc định
   description: Mô tả
   details: Chi tiết
   disable: Vô hiệu
   disabled: Đã Vô hiệu hoá
+  displayName: Tên hiển thị
   dockerId: Docker ID
   domainName: Tên miền
+  done: Hoàn thành
+  download: Tải xuống
+  edit: Chỉnh sửa
   enable: Kích hoạt
   enabled: Đã kích hoạt
   entrypoint: Entrypoint
   environment: Môi trường
+  expand: Mở rộng
   expandAll: Mở rộng tất cả
+  experimental: "(thử nghiệm)"
+  from: từ
+  generic: 'Chung'
+  gigabyte: 'Gigabyte'
+  group: 'Nhóm'
   hardware: Phần cứng
+  healthy: Tình trạng tốt
+  help: Trợ giúp
+  hostname: Tên máy chủ
+  hours: giờ
+  hpa: HPA
   id: ID
   image: Image
+  import: Nhập
   internal: Nội bộ
   ipAddress: Địa chỉ IP
+  key: Khóa
   limit: Giới hạn
   limits: Giới hạn
   loading: "Đang tải..."
+  loggingOut: "Đăng xuất..."
+  member: Thành viên
+  mbps: Mbps
   mibibyte: 'MiB'
+  minutes: phút
+  milliseconds: 'Giây'
   missing: "%MISSING% *"
   moreActions: Thêm hành động
   na: 'n/a'
   name: Tên
+  namespace: Namespace
+  namespaces: Namespaces
+  never: Không bao giờ
   no: "Không"
   noRating: Không xếp hạng
+  node: Node
   none: Rỗng
+  completedOf: "{completed} trên {total}"
+  owner: Chủ sở hữu
+  paste: Dán
+  pod: pod
+  port: Cổng
   ports: Cổng
+  prefix: tiền tố
+  project: Dự án
+  persistentVolumeClaim: yêu cầu khối lượng liên tục
+  persistentVolume: khối lượng liên tục
+  random: Ngẫu Nhiên
   remove: Xóa
+  restarts: Khởi động lại
   role: Vai trò
   save: Lưu
   saved: Đã lưu
   saving: Đang lưu
+  scope: Phạm vi
   search: Tìm kiếm
+  searchOrCustomInput: Tìm kiếm hoặc nhập giá trị tùy chỉnh của bạn.
+  searching: 'Tìm kiếm...'
   seconds: giây
   select: Chọn
   service: Dịch vụ
   services: Các Dịch Vụ
+  size: Kích thước
   state: Trạng thái
   tags: Thẻ
+  test: Kiểm tra
+  testing: Đang kiểm tra
+  to: Đến
+  total: Tổng cộng
+  type: Kiểu dữ liệu
+  unknown: Unknown
+  unknownUser: Không thể tìm nạp thông tin người dùng
+  upload: Tải lên
+  url: URL
+  user: Người dùng
+  uuid: UUID
+  value: Giá trị
+  version: Phiên bản
+  yes: "Đồng ý"
+  isRequired: là bắt buộc
+  readOnly: Chỉ đọc
+  readWrite: Đọc, Ghi
+  writeOnly: Chỉ ghi
+  full: Toàn quyền
+  linux: Linux
+  windows: Windows
 realmNames:
+  all: Tất cả
   usWest: Phía tây Hoa Kỳ
   usEast: Phía Đông Hoa Kỳ
   asia: Châu Á
+  euWest: Tây Âu
+  euEast: Đông Âu
+##############################
+#Routes
+##############################
 accountsPage:
+  detail:
+    header: Thông tin tài khoản
+    table:
+      headers:
+        permission: Quyền hạn
+        role: Vai trò
+        clusterName: Cụm
+        projectName: Dự án
+        active: Hoạt động
+        created: Đã chấp thuận
+      global:
+        title: Toàn quyền
+      roles:
+        title: Vai trò
   index:
+    header: Người dùng
+    localLink: Thêm người dùng
     table:
       id: ID
       kind: Loại
+      identity: Danh tính
+      noMatch: Không tìm thấy người dùng phù hợp
       noName: Rỗng
   new:
+    header: Thêm người dùng
+    errors:
+      usernameReq: Yêu cầu phải có tên đăng nhập.
+      pwReq: Bắt buộc phải có mật khẩu.
     form:
       username:
+        labelText: Tên người dùng
         placeholder: "Ví dụ: jsmith"
       password:
         labelText: Mật khẩu
       name:
+        labelText: Tên hiển thị
         placeholder: "Ví dụ: John Smith"
       type:
         labelText: Loại tài khoản
       description:
         labelText: Mô tả
         placeholder: "Ví dụ: tài khoản này là cho John Smith"
+  modal:
+    password: Thay đổi mật khẩu
+appDetailPage:
+  endpoints:
+    protocol: Giao thức
 apiPage:
   currentEndpoint: 'Endpoint:'
   table:
@@ -85,28 +198,6 @@ apiPage:
 authPage:
   shibboleth:
     enabled:
-      header: "{providerName} được kích hoạt"
-      required: |
-        {appName} được cấu hình cho phép truy cập tới {orgs, plural,
-        =0 {không có tổ chức nào}
-        =1 {# tổ chức}
-        other {# nhiều tổ chức}
-        } và {users, plural,
-        =0 {không có người dùng nào}
-        =1 {# người dùng}
-        other {# nhiều người dùng}
-        }.
-      restricted: |
-        {appName} được cấu hình cho phép truy cập tới các môi trường liên quan, {orgs, plural,
-        =0 {không tổ chức nào}
-        =1 {# tổ chức}
-        other {# nhiều tổ chức}
-        } và {users, plural,
-        =0 {không có người dùng nào}
-        =1 {# người dùng}
-        other {# nhiều người dùng}
-        }.
-      unrestricted: "{appName} được cấu hình để cho phép truy cập tới bất kỳ người sử dụng {providerName}."
       authenticated:
         header:
           text: Xác thực
@@ -121,19 +212,20 @@ authPage:
       userId: 'ID người dùng:'
     disabled:
       label: "{providerName} chưa được cấu hình"
-  root:
-    header: Access Control
   github:
     notAuthenticated:
       ul:
         li1:
-          text: 'Dành cho tài khoản cơ bản của GitHub, <a href="https://github.com/settings/developers" target="_blank">Nhấn vào đây</a>để truy cập các ứng dụng trong cửa sổ mới.'
           ul:
             li1: "Có thể dùng tài khoản Github doanh nghiệp cho tài khoản của bạn. Vui lòng nhấn cài đặt và chạy danh sách ứng dụng."
         li2:
           text: 'Nhấp vào "Đăng ký ứng dụng mới" và điền vào biểu mẫu:'
-  0: ""
 loginPage:
   shibbolethError:
     401: "Unauthorized"
     500: "Internal Server Error"
+nodeDriver:
+  amazoneks:
+    associateWorkerNodePublicIp:
+      radio:
+        default: "true"

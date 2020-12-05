@@ -1,0 +1,89 @@
+<section class="header clearfix">
+  {{#if isView}}
+    <div class="right-buttons pull-right">
+      {{badge-state model=model}}
+      {{action-menu
+        model=model
+        showPrimary=false
+        classNames="ml-10 inline-block"
+        size="sm"
+      }}
+    </div>
+  {{/if}}
+
+  <h1>{{title}}</h1>
+</section>
+
+{{#if (and isView model.description)}}
+  {{banner-message
+    color="bg-secondary mb-0 mt-10"
+    message=(linkify model.description)
+  }}
+{{/if}}
+
+<div class="row">
+  {{#if notView}}
+    <div class="col span-6">
+      {{form-name-description
+        nameDisabled=isEdit
+        model=primaryResource
+        descriptionShown=false
+        rowClass=""
+        colClass=""
+        nameRequired=(not isEdit)
+        namePlaceholder="newConfigMap.name.placeholder"
+        descriptionPlaceholder="newConfigMap.description.placeholder"
+      }}
+    </div>
+  {{/if}}
+
+  <div class="col span-6">
+    {{form-namespace
+      editing=isNew
+      namespace=namespace
+      errors=namespaceErrors
+    }}
+  </div>
+</div>
+
+<div class="box mt-10 mb-20">
+  {{form-key-value
+    initialMap=primaryResource.configData
+    allowEmptyValue=true
+    header=(t keyValueLabel)
+    allowUpload=true
+    addActionLabel="newConfigMap.addActionLabel"
+    addInitialEmptyRow=true
+    editing=notView
+    changed=(action "updateData")
+  }}
+</div>
+
+<div class="row mt-20">
+  <FormLabelsAnnotations
+    @classNames="accordion-wrapper"
+    @expandAll={{al.expandAll}}
+    @initialLabels={{primaryResource.labels}}
+    @model={{primaryResource}}
+    @editing={{notView}}
+  />
+</div>
+
+{{#accordion-list showExpandAll=false as | al expandFn |}}
+  {{#if isView}}
+    {{form-related-workloads
+      workloads=model.workloads
+      expandAll=al.expandAll
+      expandFn=expandFn
+    }}
+  {{/if}}
+{{/accordion-list}}
+
+{{#unless isView}}
+  {{top-errors errors=errors}}
+  {{save-cancel
+    editing=true
+    save=(action "save")
+    cancel=(action "viewEditCancel")
+  }}
+{{/unless}}

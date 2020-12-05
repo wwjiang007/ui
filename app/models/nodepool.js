@@ -1,18 +1,30 @@
-import Resource from 'ember-api-store/models/resource';
-import { reference } from 'ember-api-store/utils/denormalize';
+import Resource from '@rancher/ember-api-store/models/resource';
+import { reference } from '@rancher/ember-api-store/utils/denormalize';
 import { cancel, later } from '@ember/runloop'
-import { get, set } from '@ember/object';
-import { alias } from '@ember/object/computed';
+import { get, set, computed } from '@ember/object';
+import { ucFirst } from 'shared/utils/util';
 
 const NodePool = Resource.extend({
-  type: 'nodePool',
+  type:          'nodePool',
+  quantityTimer: null,
+
   nodeTemplate: reference('nodeTemplateId'),
 
-  displayProvider: alias('nodeTemplate.displayProvider'),
+  displayProvider: computed('driver', 'nodeTemplate.driver', 'intl.locale', function() {
+    const intl = get(this, 'intl');
+    const driver = get(this, 'driver');
+    const key = `nodeDriver.displayName.${ driver }`;
 
-  quantityTimer: null,
+    if ( intl.exists(key) ) {
+      return intl.t(key);
+    } else {
+      return ucFirst(driver);
+    }
+  }),
+
   incrementQuantity(by) {
-    let quantity = get(this,'quantity');
+    let quantity = get(this, 'quantity');
+
     quantity += by;
     quantity = Math.max(0, quantity);
 
@@ -24,7 +36,7 @@ const NodePool = Resource.extend({
 
     var timer = later(this, function() {
       this.save().catch((err) => {
-        get(this, 'growl').fromError('Error updating node pool scale',err);
+        get(this, 'growl').fromError('Error updating node pool scale', err);
       });
     }, 500);
 

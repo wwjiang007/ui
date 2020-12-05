@@ -1,0 +1,10 @@
+<span class="tooltip-expire">
+  <p class="mb-5">
+    {{t "tooltipExpire.label"}}
+  </p>
+  {{#if model.canRotateCerts }}
+    <a href="#" {{action "rotateCertificates"}}>
+      {{t "tooltipExpire.link"}}
+    </a>
+  {{/if}}
+</span>

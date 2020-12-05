@@ -1,9 +1,14 @@
 ---
 languageName: "Norsk"
 languageContribute: "Hjelp til med å oversette Rancher"
+##############################
+#Really generic things used in multiple places (use sparingly)
+##############################
 generic:
   actions: Handlinger
   activate: Aktiver
+  add: Legg til
+  advanced: Avansert
   all: Alle
   cancel: Avbryt
   closeModal: Lukk
@@ -12,33 +17,55 @@ generic:
   description: Beskrivelse
   disable: Deaktiver
   disabled: Deaktivert
+  displayName: Visningsnavn
   dockerId: Docker ID
   domainName: Domenenavn
+  done: Fullført
+  download: Last ned
+  edit: Rediger
   enable: Aktiver
   enabled: Aktivert
+  from: fra
+  gigabyte: 'GB'
   hardware: Maskinvare
   healthy: Frisk
+  help: Hjelp
   id: ID
   image: Bilde
   internal: Intern
   ipAddress: IP-adresse
   limit: Grense
   loading: "Laster inn..."
+  mibibyte: 'MiB'
+  minutes: minutter
+  milliseconds: 'Millisekunder'
   missing: "*%MISSING% *"
   moreActions: Flere handlinger
   na: 'Ikke tilgjengelig'
   name: Navn
+  namespace: Navneområde
+  namespaces: Navneområder
+  never: Aldri
   no: "Nei"
+  noRating: Ingen vurdering
   none: Ingen
+  owner: Eier
+  paste: Lim inn
   ports: Porter
+  prefix: prefiks
+  project: Prosjekt
+  random: Tilfeldig
   remove: Fjern
   role: Rolle
   save: Lagre
   saved: Lagret
   saving: Lagrer
   search: Søk
+  searching: 'Søker...'
   select: Velg
   service: Tjeneste
+  services: Tjenester
+  size: Størrelse
   state: Tilstand
   test: Test
   testing: Tester
@@ -46,59 +73,116 @@ generic:
   total: Totalt
   type: Type
   unknown: Ukjent
+  url: URL
+  user: Bruker
   uuid: UUID
+  version: Versjon
   yes: "Ja"
 realmNames:
+  all: Alle
+  usWest: USA vest
+  usEast: USA øst
   asia: Asia
+  euWest: EU vest
+  euEast: EU øst
+##############################
+#Routes
+##############################
 accountsPage:
+  detail:
+    table:
+      headers:
+        role: Rolle
+        clusterName: Klyngen
+        projectName: Prosjekt
+      project:
+        title: Prosjektroller
+      roles:
+        title: Roller
   index:
+    header: Brukere
+    localLink: Legg til bruker
     table:
       id: ID
       kind: Type
+      username: Lokalt brukernavn
       identity: Identitet
       noName: Ingen
   new:
+    header: Legg til bruker
+    errors:
+      usernameReq: Brukernavn er påkrevd.
+      usernameInExists: Brukernavnet er allerede i bruk. Vennligst velg et nytt brukernavn.
+      pwReq: Passord er påkrevd.
     form:
       username:
+        labelText: Brukernavn
         placeholder: "f.eks onormann"
       password:
         labelText: Passord
       name:
+        labelText: Visningsnavn
         placeholder: "f.eks Ola Normann"
       type:
         labelText: Kontotype
       description:
         labelText: Beskrivelse
         placeholder: "f.eks denne kontoen er for Ola Normann"
+  modal:
+    password: Endre passord
+appDetailPage:
+  services:
+    title: Tjenester
+podSecurityPoliciesPage:
+  index:
+    table:
+      name: Navn
+  saveEdit: Rediger
+  new:
+    errors:
+      nameReq: Navn er påkrevd.
+    form:
+      name:
+        labelText: Navn
+rolesPage:
+  title: Rolle
+  index:
+    localLink: Legg til rolle
+    table:
+      name: Navn
+  editRole: Rediger rolle
+  saveEdit: Rediger
+  new:
+    errors:
+      nameReq: Navn er påkrevd.
+      nameInExists: Navnet finnes allerede. Vennligst bruk et nytt rollenavn.
+    form:
+      name:
+        labelText: Navn
+      allow:
+        create: Opprett
+        delete: Slett
+        get: Hent
+        labelText: Tillat
+      otherRole:
+        role: Rolle
+        addAction: Legg til rolle
+      default:
+        disabled: "Nei"
 apiPage:
+  actionButton: Legg til nøkkel
   table:
     description: Beskrivelse
     created: Oppprettet
 authPage:
+  saml:
+    enabled:
+      displayName: 'Visningsnavn:'
+      userName: 'Brukernavn:'
+    providerName:
+      adfs: AD FS
   shibboleth:
     enabled:
-      header: "{providerName} er aktivert"
-      required: |
-        {appName} er konfigurert til å tillate tilgang til {organisasjoner, plural,
-        =0 {ingen organisasjoner}
-        =1 {# organisasjon}
-        other {# organisasjoner}
-        } og {brukere, plural,
-        =0 {ingen brukere}
-        =1 {# bruker}
-        other {# brukere}
-        }.
-      restricted: |
-        {appName} er konfigurert til å tillate tilgang til miljø medlemmer for {organisasjoner, plural,
-        =0 {ingen organisasjoner}
-        =1 {# organisasjon}
-        other {# organisasjoner}
-        } og {brukere, plural,
-        =0 {ingen brukere}
-        =1 {# bruker}
-        other {# brukere}
-        }.
-      unrestricted: "{appName} er konfigurert til å tillate tilgang fra alle {providerName} brukere."
       authenticated:
         header:
           text: Autentisering
@@ -114,29 +198,16 @@ authPage:
     disabled:
       header: '1. Konfigurer Shibboleth konto'
       label: "{providerName} er ikke konfigurert"
-      warning: "{appName} kan konfigureres til å begrense tilgang til en rekke {providerName} brukere og grupper.  Dette er ikke er konfigurert, så de som når denne siden (eller kan nå APIet) har full kontroll over systemet."
       uid:
         labelText: UID-felt
     providerName:
       shibboleth: Shibboleth
   root:
-    header: Access Control
+    header: Tilgangskontroll
   github:
     standard: GitHub
     enterprise: GitHub Enterprise
     header:
-      enabled:
-        label: "{github} er aktivert"
-        required: |
-          {appName} er konfigurert til å tillate tilgang til {organisasjoner, plural,
-          =0 {ingen organisasjoner}
-          =1 {# organisasjon}
-          other {# organisasjoner}
-          } og {brukere, plural,
-          =0 {ingen brukere}
-          =1 {# bruker}
-          other {# brukere}
-          }.
       disabled:
         label: GitHub er ikke konfigurert
     authenticated:
@@ -153,7 +224,7 @@ authPage:
           ul:
             li1: '<b>Navn:</b> <span class="text-muted"> noe du ønsker å bruke, f.eks min {appName}</span>'
         li3:
-          text: 'Trykk "Registrer program" '
+          text: 'Trykk "Registrer program"'
       form:
         clientId:
           labelText: Klient-ID
@@ -173,17 +244,6 @@ authPage:
       tenantId:
         label: Leietaker-ID
         placeholder: En lang UUID-streng
-      clientId:
-        label: Klient-ID
-        placeholder: En lang UUID-streng
-      domain:
-        label: Domene
-        placeholder: f.eks dittfirma.hosmicrosoft.no
-      adminAccountUsername:
-        label: Administrator brukernavn
-        placeholder: f.eks rancher-administrator
-      adminAccountPassword:
-        label: Administrator passord
     test:
       username:
         placeholder: 'f.eks onormann'
@@ -210,8 +270,6 @@ authPage:
       buttonText:
         pre: Aktiver lokal autentisering
         post: 'Aktiverer...'
-  0:
-    header: Tilgangskontroll
 catalogPage:
   index:
     certified:
@@ -239,6 +297,43 @@ certificatesPage:
         placeholder: f.eks mittdomene.no
       description:
         placeholder: f.eks EV sertifikat for mittdomene.no
+membersPage:
+  add:
+    title: 'Legg til {type} medlem'
+  index:
+    table:
+      name: Navn
+namespacesPage:
+  header: Navneområder
+  addNamespace: Legg til navneområde
+  table:
+    name:
+      label: Navneområde
+    description:
+      label: Beskrivelse
+    project:
+      label: Prosjekt
+    created:
+      label: Oppprettet
+projectsListNamespacePage:
+  header: Navneområder
+  notIn: Ikke i et prosjekt
+  current: I dette prosjektet
+projectsPage:
+  header: Prosjekter / Navneområder
+  headerNS: Navneområder
+  ns:
+    label: Navneområdenavn
+  name:
+    placeholder: f.eks lab
+  members:
+    addUser: Legg til bruker
+    addGroup: Legg til gruppe
+    name:
+      label: Navn
+    errors:
+      nameReq: Navn er påkrevd.
+      nameInExists: Navnet finnes allerede. Vennligst bruk et nytt prosjektnavn.
 containerPage:
   portsTab:
     hostPrimaryIp: '({ip})'
@@ -256,11 +351,24 @@ containersPage:
     sparkPrefixStorage: "Lagring: "
 dnsPage:
   noMatch: Ingen oppføringer stemmer med det gjeldende søket
+  type:
+    cname: Vertsnavn
 editDns:
   name:
     placeholder: f.eks minapplikasjon
   description:
     placeholder: f.eks gjeldende versjon av minapplikasjon
+  placeholder:
+    cname: f.eks eksempel.no
+cruPersistentVolumeClaim:
+  name:
+    placeholder: f.eks minvol
+cruVolume:
+  name:
+    placeholder: f.eks minvol
+#If you change translations here also change the translation in app/utils/constants.js under the FALLBACK_TRANSLATIONS key
+#those are present in case we have an error in the app and can not load the translations file
+#the error page will at least make a little sense
 failWhalePage:
   header: Feil
   logoutButton: Logg ut
@@ -275,6 +383,8 @@ haPage:
 hostsPage:
   cloudHostsPage:
     addPage:
+      name:
+        placeholder: f.eks node01
       transferUnit: TB
       instance: 'Type:'
       storage: 'Lagring:'
@@ -287,6 +397,7 @@ hostsPage:
       template: 'Malnavn:'
   addContainer: Legge til en beholder
   hostPage:
+    hostname: Vertsnavn
     limits:
       cpu: 'Grense for CPU:'
       memory: 'Minnegrense:'
@@ -320,6 +431,9 @@ loginPage:
 machinePage:
   inactive: Inaktiv
   builtin: Innebygd
+#If you change translations here also change the translation in app/utils/constants.js under the FALLBACK_TRANSLATIONS key
+#those are present in case we have an error in the app and can not load the translations file
+#the error page will at least make a little sense
 notFoundPage:
   linkTo: Gå til startsiden
 registriesPage:
@@ -342,6 +456,7 @@ registriesPage:
 servicePage:
   multistat:
     fqdn: 'FQDN:'
+    namespace: 'Navneområde:'
   linksTab:
     header: Koblinger
   new:
@@ -356,26 +471,35 @@ servicePage:
         placeholder: f.eks nettsted
       description:
         placeholder: f.eks lastbalanserer for mittfirma.no
+signupPage:
+  form:
+    labels:
+      loginUsername: Navn
 newStack:
   name:
     placeholder: f.eks minapplikasjon
+  files:
+    namePlaceholder: Filnavn
+nodeTemplatesPage:
+  table:
+    name: Navn
+userPreferencesPage:
+  generalInfo:
+    name:
+      label: Navn
+    username:
+      label: Brukernavn
 waitingPage:
   hosts:
     setup:
       kubernetes: Definer Kubernetes
+notifierPage:
+  smtp:
+    userName: Brukernavn
+##############################
+#Partials
+##############################
 ldap:
-  header:
-    enabled:
-      restricted: |
-        {appName} er konfigurert til å tillate tilgang til miljø medlemmer for {grupper, plural,
-        =0 {ingen grupperr}
-        =1 {# gruppe}
-        other {# grupper}
-        } og {brukere, plural,
-        =0 {ingen brukere}
-        =1 {# bruker}
-        other {# brukere}
-        }.
   accessConfig:
     groupSearchBase:
       placeholder: "f.eks ou=Gruppe,dc=mittfirma,dc=no"
@@ -402,13 +526,15 @@ catalogSettings:
     name:
       label: Navn
       placeholder: f.eks minkatalog
-    url:
-      placeholder: 'f.eks https://github.com/mittfirma/minkatalog.git'
     branch:
       label: Gren
       placeholder: 'f.eks hovedgren'
+clusterNew:
+  rke:
+    registry:
+      user:
+        label: Brukernavn
 confirmDelete:
-  title: 'Er du sikker på at du ønsker å slette'
   confirmAction: Slett
   cancelAction: Avbryt
 containerLogs:
@@ -434,6 +560,56 @@ containerShell:
 copyToClipboard:
   tooltip: Kopier til utklippstavlen
   copied: Kopiert!
+cruPersistentVolume:
+  azureFile:
+    secretNamespace:
+      label: Hemmelig navneområde
+      placeholder: "f.eks. standard"
+    shareName:
+      placeholder: "f.eks abc"
+  cephfs:
+    secretRef:
+      name:
+        placeholder: "f.eks abc"
+      namespace:
+        label: Hemmelig navneområde
+        placeholder: "f.eks. standard"
+      label: Hemmelig navn
+  rbd:
+    secretRef:
+      label: Hemmelig navn
+  flexVolume:
+    secretRef:
+      label: Hemmelig navn
+  gcePersistentDisk:
+    pdName:
+      placeholder: "f.eks abc"
+  iscsi:
+    initiatorName:
+      placeholder: "f.eks abc"
+    secretRef:
+      label: Hemmelig navn
+  scaleIO:
+    secretRef:
+      namespace:
+        label: Hemmelig navneområde
+        placeholder: "f.eks. standard"
+      label: Hemmelig navn
+  storageos:
+    secretRef:
+      namespace:
+        label: Hemmelig navneområde
+        placeholder: "f.eks. standard"
+      label: Hemmelig navn
+    volumeNamespace:
+      placeholder: "f.eks. standard"
+cruStorageClass:
+  storageos:
+    adminSecretNamespace:
+      placeholder: "f.eks. standard"
+  glusterfs:
+    secretNamespace:
+      placeholder: "f.eks. standard"
 dangerZone:
   header: Avanserte innstillinger
 editAccount:
@@ -462,6 +638,9 @@ editCertificate:
     placeholder: f.eks mittdomene.no
   description:
     placeholder: f.eks EV sertifikat for mittdomene.no
+editCluster:
+  name:
+    label: Navn
 editContainer:
   title:
     vm: Rediger VM
@@ -485,13 +664,18 @@ editHost:
     valuePlaceholder: f.eks 1.2.3.4
     addActionLabel: Legge til IP-addresse
 editStack:
+  title: Rediger navneområdet
   name:
     label: Navn
+    error: Navneområdenavn er allerede i bruk. Vennligst velg et nytt navneområdenavn.
     placeholder: f.eks minapplikasjon
   description:
     label: Beskrivelse
+    placeholder: f.eks. MinApp navneområde
   group:
     placeholder: f.eks frontend, produksjon
+stackHeader:
+  title: 'Navneområde: {name}'
 formatIp:
   noIp: Ingen
 formBalancerListeners:
@@ -567,6 +751,16 @@ formEngineOpts:
     valuePlaceholder: f.eks registry.eksempel.no
   engineRegistryMirror:
     valuePlaceholder: f.eks https://min-klone.eksempel.no:5000
+formResourceQuota:
+  table:
+    namespaceLimit:
+      placeholder: f.eks. 10
+      milliCpuPlaceholder: f.eks. 500
+      memoryPlaceholder: f.eks. 1024
+formMembers:
+  members:
+    name:
+      label: Navn
 formHealthCheck:
   checkType:
     none: Ingen
@@ -607,6 +801,12 @@ formNetwork:
     label: Søk i domener
     placeholder: f.eks produksjon.eksempel.no
     addActionLabel: Legg til domene
+  hostAlias:
+    host:
+      label: Vertsnavn
+formPorts:
+  name:
+    label: Navn
 formScheduling:
   field: Felt
   value: Verdi
@@ -631,6 +831,17 @@ formSecurity:
 formSslTermination:
   alternateCerts: Alternative sertifikater
   addAlternate: Legg til alternativt sertifikat
+formNamespace:
+  label:
+    reuse: Navneområde
+    create: Navneområde
+    default: Standard navneområde
+  toggle:
+    simple: Tilpass
+  create:
+    placeholder: f.eks minapplikasjon
+  errors:
+    validation: "Navneområde: {error}"
 formUserLabels:
   addAction: Legg til etikett
   key:
@@ -653,26 +864,10 @@ hostPod:
   supportState:
     untested: Ikke testet Docker versjon
   groupedInstances:
+    namespace: 'Navneområde:'
     standalone: Frittstående beholdere
 identityBlock:
   loading: Laster inn...
-infoMultiStats:
-  connecting: Kobler til...
-  cpuSection:
-    labelText: CPU
-    system: System
-    user: Bruker
-  networkSection:
-    labelText: Nettverk
-    transmit: Overføre
-    receive: Motta
-  memorySection:
-    labelText: Minne
-    used: Brukt
-  storageSection:
-    labelText: Lagring
-    read: Les
-    write: Skriv
 inputIdentity:
   dropdownLabel:
     groups: Dine grupper
@@ -718,11 +913,14 @@ modalProcessError:
   close: Lukk
 modalWelcome:
   header: Velkommen til {appName}!
+namespaceGroup:
+  project: "Navneområde: Alle"
 newCatalog:
   catalog: "Katalog:"
   category: "Kategori:"
   maintainedBy: Vedlikeholdes av fellesskapmedlemmer
   maintainer: "Utvikler:"
+  newNamespace: Nytt navneområde
   noConfig: Denne malen har ingen konfigurasjonsalternativer
   official: Offisielt sertifisert
   preview: Forhåndsvisning
@@ -732,7 +930,6 @@ newCatalog:
   txt: svar.txt
   upgrade: "Oppgrader:"
 newContainer:
-  saveUpgrade: Oppgrader
   name:
     placeholder: f.eks minapplikasjon
   description:
@@ -740,6 +937,19 @@ newContainer:
   environment:
     keyPlaceholder: f.eks FOO
     valuePlaceholder: f.eks bar
+nodeDriver:
+  displayName:
+    exoscale: Exoscale
+    openstack: OpenStack
+    rackspace: RackSpace
+    vmwarevsphere: vSphere
+    zstack: ZStack
+  amazoneks:
+    associateWorkerNodePublicIp:
+      radio:
+        default: "true"
+projectGroup:
+  none: Navneområde
 pageFooter:
   issues: Rapporter et problem
 projectRow:
@@ -794,23 +1004,38 @@ volumeRow:
     readOnly: "(read-only)"
 waitOrchestration:
   count: '({sub} av {count})'
+##############################
+#Mixins
+##############################
 containerChoices:
   hostGroup: "Vert: {name}"
   hostGroupWithState: "Vert: {name} ({state})"
   unknownHost: "Vert: ???"
   containerOption: "{name}"
+##############################
+#Navigation
+##############################
 nav:
-  environment:
-    label: Miljø
-    all: Alle miljøer
-    your: Dine miljøer
-    selected: Valgte miljøer
+  cluster:
+    namespaces: Navneområder
+    projects: Prosjekter / Navneområder
   user:
     logout: Logg ut
+  project:
+    namespaces: Navneområder
+##############################
+#Resource Actions
+##############################
 action:
   viewInstance: Vis forekomst
+##############################
+#Resource Actions
+##############################
 validation:
   required: '"{key}" er påkrevd'
+##############################
+#Model Properties
+##############################
 model:
   account:
     kind:

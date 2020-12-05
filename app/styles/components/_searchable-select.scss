@@ -1,8 +1,11 @@
 .searchable-select {
   $group-indent: 20px;
   $indent: 20px;
+  $group-padding: 8px 0px 8px 20px;
   padding-left: 0;
   padding-right: 0;
+  text-align: center;
+  position: relative;
 
   .input-arrow {
     position: relative;
@@ -28,15 +31,19 @@
     color: white;
   }
 
-  font-family: prompt;
+  font-family: $text-font-stack;
   position: relative;
   color: $text-color;
 
   .searchable-group {
+    background: lighten($dropdown-bg, 5%);
     .group-label {
       color: $text-muted;
-      padding-left: $indent;
+      padding: $group-padding;
       font-weight: bold;
+      border-bottom: 1px solid $accent-border;
+      background: $dropdown-bg;
+      text-align: left;
     }
     > div {
       padding-left: $indent + $group-indent;
@@ -75,9 +82,6 @@
     padding: 0px 0;
     padding-left: $indent;
     position: relative;
-    border-width: 0 1px 1px 1px;
-    border-color: $border;
-    border-style: solid;
     padding: 8px 18px;
     font-size: 14px;
 
@@ -89,5 +93,19 @@
   }
   .no-match {
     padding-left: $indent;
+  }
+  .no-options {
+    border: none !important;
+  }
+
+  &:not(.loading) .icon-spinner {
+      display: none;
+  }
+
+  .icon-spinner {
+      position: absolute;
+      top: 0;
+      font-size: 1.8em;
+      line-height: 1.5;
   }
 }

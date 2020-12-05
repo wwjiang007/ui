@@ -67,7 +67,7 @@ $table-bg-selected                   : rgba($info, .20);
 $table-border-color                  : darken($mid-grey, 30);
 $table-body-separation               : 50px;
 $table-body-separation               : 25px;
-$group-row-height                    : 40px;
+$group-row-height                    : 50px;
 
 // banners
 $banner-default                      : $light-grey;
@@ -82,7 +82,7 @@ $banner-color                        : white;
 
 /*Forms*/
 //** Placeholder text color
-$input-color-placeholder             : darken($light-grey, 50%);
+$input-color-placeholder             : $text-color;
 
 //** `<input>` background color
 $input-bg                            : lighten($dark-grey, 5);
@@ -93,7 +93,7 @@ $input-bg-hover                      : $light-grey;
 $input-bg-disabled                   : #f3f4f8;
 
 //** Text color for `<input>`s
-$input-color                         : $text-color;
+$input-color                         : lighten($text-color, 50%);
 
 //** `<input>` border color
 $input-border                        : transparent;
@@ -101,7 +101,7 @@ $input-border                        : transparent;
 $input-group-addon-border-color      : $input-border;
 
 //** Border color for inputs on focus
-$input-border-focus                  : #66afe9;
+$input-border-focus                  : $light-grey;
 
 $legend-color                        : $text-color;
 $legend-border-color                 : #e5e5e5;
@@ -142,6 +142,7 @@ $dropdown-caret-color                : #000;
 
 //** Tooltip text color
 $tooltip-color                       : white;
+$tooltip-link-color                  : white;
 //** Tooltip background color
 $tooltip-bg                          : rgba($black,.9);
 $tooltip-opacity                     : .9;
@@ -184,3 +185,5 @@ $pre-border-color                    : $light-grey;
 $stroke-color                        : black;
 $stroke-fill                         : black;
 $stroke-text                         : white;
+
+$project-nav-hover                   : $tab-hover;

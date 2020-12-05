@@ -1,28 +1,63 @@
 ---
-pipeline:
-  build:
-    privileged: true
-    image: rancher/dind:v0.3.0
-    commands:
-      - ENABLE_DOCKER=true ./scripts/ci
+kind: pipeline
+name: default
 
-  latest:
-    privileged: true
-    image: rancher/dind:v0.3.0
-    commands:
-      - ENABLE_DOCKER=true UPLOAD_LATEST=true ./scripts/ci
-    when:
-      branch: "master"
-      event:
-        exclude: [pull_request]
+platform:
+  os: linux
+  arch: amd64
 
-  # Needs envvar SLACK_TOKEN
-  #  slack_blame:
-  #    image: plugins/slack-blame
-  #    channel: ui
-  #    success_template: |
-  #      {{repo.owner}}/{{repo.name}} branch: {{build.branch}} commit: {{build.commit}} by {{build.author}} <{{build.email}}> - {{commit.message}} - {{build.link}}
-  #    failure_template: |
-  #      {{repo.owner}}/{{repo.name}} branch: {{build.branch}} commit: {{build.commit}} by {{build.author}} <{{build.email}}> - {{commit.message}} - {{build.link}}
-  #    when:
-  #      status: [ success, failure ]
+steps:
+- name: test
+  pull: default
+  image: rancher/dapper:v0.4.1
+  commands:
+  - dapper ci
+  privileged: true
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
+  when:
+    event:
+    - pull_request
+    exclude:
+    - tag
+
+- name: build
+  pull: default
+  image: rancher/dapper:v0.4.1
+  commands:
+  - BUILD_LATEST=true dapper ci
+  privileged: true
+  volumes:
+  - name: docker
+    path: /var/run/docker.sock
+  when:
+    branch:
+    - master
+    event:
+      exclude:
+      - pull_request
+      - tag
+
+- name: upload
+  pull: default
+  image: plugins/gcs
+  settings:
+    acl:
+    - allUsers:READER
+    cache_control: "no-cache,must-revalidate"
+    source: dist/static/latest2
+    target: releases.rancher.com/ui/latest2
+    token:
+      from_secret: google_auth_key
+  when:
+    branch:
+    - master
+    event:
+      exclude:
+      - pull_request
+      - tag
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock

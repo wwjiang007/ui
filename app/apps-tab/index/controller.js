@@ -4,31 +4,52 @@ import Controller, { inject as controller } from '@ember/controller';
 import C from 'ui/utils/constants';
 import { computed, get, observer } from '@ember/object';
 import { once } from '@ember/runloop';
+import { filter } from 'ui/utils/search-text';
 
 export default Controller.extend({
-  projectController: controller('authenticated.project'),
   prefs:             service(),
   intl:              service(),
   catalog:           service(),
-  tags:              alias('projectController.tags'),
+  projectController: controller('authenticated.project'),
   sortBy:            'name',
 
 
+  tags:              alias('projectController.tags'),
   templatesObsvr: observer('model.apps.[]', function() {
-    once(() => this.get('catalog').fetchAppTemplates(get(this, 'model.apps')));
+    once(this, 'fetchCatalogResources');
   }),
 
-  filteredApps: computed('model.apps.@each.{type,isFromCatalog,tags,state}','tags', function() {
-    var needTags = get(this,'tags');
+  filteredApps: computed('model.apps.@each.{type,isFromCatalog,tags,state}', 'tags', 'searchText', function() {
+    var needTags = get(this, 'tags');
 
-    var out = get(this,'model.apps').filter((ns) => {
-      return !C.REMOVEDISH_STATES.includes(get(ns,'state'));
-    });
+    var apps = get(this, 'model.apps').filter((ns) => !C.REMOVEDISH_STATES.includes(get(ns, 'state')));
 
     if ( needTags && needTags.length ) {
-      out = out.filter((obj) => obj.hasTags(needTags));
+      apps = apps.filter((obj) => obj.hasTags(needTags));
     }
 
-    return out.sortBy('displayName');
+    apps = apps.filterBy('isIstio', false);
+    apps = apps.sortBy('displayName');
+
+    const { matches } = filter(apps, get(this, 'searchText'));
+
+    const group = [];
+    let dataIndex = 0;
+
+    matches.forEach((app, index) => {
+      if ( index % 2 === 0 ) {
+        group.push([app]);
+        dataIndex++;
+      } else {
+        group[dataIndex - 1].push(app);
+      }
+    });
+
+    return group;
   }),
+
+  fetchCatalogResources() {
+    this.catalog.fetchAppTemplates(get(this, 'model.apps'));
+  },
+
 });

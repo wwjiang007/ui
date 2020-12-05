@@ -1,0 +1,145 @@
+{{#if cluster.certsExpiring}}
+  {{#banner-message color="bg-warning"}}
+    <p>{{t "tooltipExpire.label"}} {{#if cluster.canRotateCerts}}<a href="#" {{action "rotate"}}>{{t "tooltipExpire.link"}}</a>{{/if}}</p>
+  {{/banner-message}}
+{{/if}}
+{{#if cluster.nodeGroupVersionUpdate}}
+  {{#banner-message color="bg-warning"}}
+    <p>{{t "tooltipNodeGroupUpdate.label"}} <a href="#" {{action "edit"}}>{{t "tooltipNodeGroupUpdate.link"}}</a></p>
+  {{/banner-message}}
+{{/if}}
+{{#if showDashboard}}
+  {{cluster-basic-info cluster=cluster}}
+
+  {{#unless scope.currentCluster.isMonitoringReady}}
+    {{#if monitoringEnabled}}
+      <div class="row mt-0 mb-0">
+        <div class="pull-right text-small text-error">
+          {{t "clusterDashboard.monitoringNotReady"}}
+        </div>
+      </div>
+    {{else}}
+      <div class="row mt-0 mb-0">
+        <div class="pull-right text-small">
+          <button class="btn bg-transparent p-0" type="button" {{action "enableMonitoring"}}>
+            {{t "clusterDashboard.enableMonitoring"}}
+          </button>
+        </div>
+      </div>
+    {{/if}}
+  {{else if (and monitoringEnabled (eq toUpgrade.firstObject.name "cluster-monitoring"))}}
+    <div class="row mt-0 mb-0">
+      <div class="pull-right text-small">
+        <button class="btn bg-warning pt-0 pb-0 pl-5 pr-5" type="button" {{action "enableMonitoring"}}>
+          {{t "clusterDashboard.upgradeAvailable" version=latestVersion}}
+        </button>
+      </div>
+    </div>
+  {{/unless}}
+
+  {{nodes-live nodes=nodes}}
+
+  <div class="row mt-0">
+    {{#if hideEtcdStatus}}
+      <div class="col mt-0 span-3">
+        {{#banner-message
+           icon="icon-alert"
+           color="bg-disabled mt-0"
+        }}
+          <p class="text-left">
+            {{t "clusterDashboard.etcdUnavailable"}}
+          </p>
+        {{/banner-message}}
+      </div>
+    {{else}}
+      {{k8s-component-status
+        label="clusterDashboard.etcd"
+        showUrl=scope.currentCluster.isRKE
+        healthy=etcdHealthy
+        url=grafana.etcdUrl
+      }}
+    {{/if }}
+
+    {{#if hideManagerAndSchedulerStatus}}
+      <div class="col mt-0 span-3">
+        {{#banner-message
+           icon="icon-alert"
+           color="bg-disabled mt-0"
+        }}
+          <p class="text-left">
+            {{t "clusterDashboard.controllerManagerUnavailable"}}
+          </p>
+        {{/banner-message}}
+      </div>
+    {{else}}
+      {{k8s-component-status
+        label="clusterDashboard.controllerManager"
+        healthy=controllerHealthy
+        url=grafana.controllerUrl
+      }}
+    {{/if}}
+
+    {{#if hideManagerAndSchedulerStatus}}
+      <div class="col mt-0 span-3">
+        {{#banner-message
+           icon="icon-alert"
+           color="bg-disabled mt-0"
+        }}
+          <p class="text-left">
+            {{t "clusterDashboard.schedulerUnavailable"}}
+          </p>
+        {{/banner-message}}
+      </div>
+    {{else}}
+      {{k8s-component-status
+        label="clusterDashboard.scheduler"
+        healthy=schedulerHealthy
+        url=grafana.schedulerUrl
+      }}
+    {{/if}}
+
+    {{k8s-component-status
+      label="clusterDashboard.node"
+      healthy=nodesHealthy
+      url=grafana.nodesUrl
+    }}
+  </div>
+
+  {{#unless hideManagerAndSchedulerStatus}}
+    <div class="row">
+      {{#each cluster.displayWarnings as |warning|}}
+        {{#banner-message icon="icon-alert" color="text-left bg-error mt-30"}}
+          <p>{{warning}}</p>
+        {{/banner-message}}
+      {{/each}}
+    </div>
+  {{/unless}}
+
+  {{#if (and showClusterTabs scope.currentCluster.isMonitoringReady)}}
+    {{cluster-dashboard-tabs dashboards=dashboards}}
+  {{else}}
+    {{#accordion-list showExpandAll=false as | al expandFn |}}
+      {{resource-event-list
+        resourceType=(t "generic.cluster")
+        clusterEvents=true
+        expandAll=al.expandAll
+        expandFn=expandFn
+      }}
+    {{/accordion-list}}
+  {{/if}}
+{{else}}
+  <div class="text-center text-muted">
+    {{t "clusterDashboard.clusterNotReady"}}
+  </div>
+  {{#if cluster.canShowAddHost}}
+  <div class="text-center mt-20">
+    <button class="btn bg-primary" type="button" {{action "addHost"}}>
+      {{#if cluster.eksDisplayEksImport}}
+        {{t "clusterDashboard.importHost"}}
+      {{else}}
+        {{t "clusterDashboard.clusterHasNoNodes"}}
+      {{/if}}
+    </button>
+  </div>
+  {{/if}}
+{{/if}}

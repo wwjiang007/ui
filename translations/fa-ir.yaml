@@ -1,44 +1,71 @@
 ---
 languageName: "فارسی"
 languageContribute: "در ترجمه رنچر کمک کنید!"
+##############################
+#Really generic things used in multiple places (use sparingly)
+##############################
 generic:
   actions: اکشن ها
+  active: فعال
   activate: قعال سازی
   add: افزودن
+  advanced: پیشرفته
   all: همه
   any: هر
+  application: برنامه‌
   as: به عنوان
+  back: بازگشت
   cancel: لغو
   closeModal: بستن
+  cluster: خوشه
+  collapse: بستن
   collapseAll: بستن همه
+  comingSoon: به زودی
   command: دستور
   confirm: تایید
   containers: کانتینرها
   created: ساخته شد
   createdDate: "ایجاد شد {date}"
+  custom: سفارشی
+  customize: شخصی سازی
   default: پیش فرض
   description: توضیح
   details: جزییات
   disable: غیر فعال کردن
   disabled: غیر فعال
   displayName: نام نمایشی
+  dockerId: شناسه Docker
   domainName: نام دامنه
   done: انجام شد
+  download: دانلود
   edit: ویرایش
   enable: فعال کردن
   enabled: فعال
+  entrypoint: نقطه ورود
   environment: محیط
+  expand: باز کردن
   expandAll: بازکردن همه
+  experimental: "(آزمایشی)"
+  from: از
+  false: 'نادرست'
+  generic: 'عمومی'
+  gigabyte: 'گیگابایت'
+  group: 'گروه'
   hardware: سخت‌افزار
   healthy: سالم
   help: راهنما
+  hostname: نام هاست
+  hours: ساعت
   id: آیدی
   image: تصویر
+  import: وارد کردن
   internal: داخلی
   ipAddress: آدرس آی پی
+  key: کلید
   limit: محدودیت
   limits: محدودیت‌ها
   loading: "در حال بارگزاری..."
+  member: عضو
   mibibyte: 'MiB'
   missing: "*%یافت نشده%*"
   moreActions: اکشن های بیشتر
@@ -48,72 +75,196 @@ generic:
   no: "خیر"
   noRating: بدون امتیاز
   none: هیچ یک
+  owner: مالک
   ports: پورت ها
+  prefix: پیشوند
+  project: پروژه
+  random: تصادفی
   remove: حذف
   role: نقش
   save: ذخیره
   saved: ذخیره شد
   saving: در حال ذخیره سازی
   search: جستجو
+  searching: 'در حال جستجو...'
   seconds: ثانیه
   select: انتخاب
   service: سرویس
+  services: سرویس ها
+  size: حجم
   state: وضعیت
+  tags: برچسب‌ها
   test: تست
   testing: در حال تست
   to: به
   total: مجموع
   type: نوع
   unknown: ناشناس
-  user: کاربر
+  unknownUser: واکشی اطلاعات کاربر امکان‌پذیر نیست
   upload: بارگذاری
+  user: کاربر
   uuid: شناسه منحصر به فرد عمومی
   value: مقدار
+  version: نسخه
   yes: "بله"
+  readOnly: فقط خواندنی
+  cpu: پردازشگر
+  memory: حافظه
+  branch: شاخه
+  commit: کامیت
+  repository: مخزن
+  logout: "خروج کاربر {user}"
+  github: گیت‌هاب
+  gitlab: گیت‌لب
+  bitbucket: بیت‌باکت
 realmNames:
   all: همه
+  usWest: غرب آمریکا
+  usEast: شرق آمریکا
   asia: آسیا
+##############################
+#Routes
+##############################
 accountsPage:
   detail:
     header: مشخصات کاربر
     table:
       headers:
         permission: سطح دسترسی
+        role: نقش
+        clusterName: خوشه
         projectName: پروژه
         active: فعال
+        group: گروه
+      global:
+        title: مجوزهای سراسری
+      cluster:
+        title: نقش‌های خوشه
+      project:
+        title: نقش‌های پروژه
+      roles:
+        title: نقش ها
   index:
+    header: کاربران
     localLink: افزودن کاربر
     table:
       id: آی دی
       kind: نوع
       identity: هویت
       noName: هیچ یک
+  groups:
+    header: گروه‌ها
+    table:
+      groupName: نام گروه
   new:
     header: افزودن کاربر
     errors:
       usernameReq: نام کاربری الزامی است.
+      pwReq: کلمه عبور الزامی است.
+      role: کاربران جدید ملزم به داشتن یک نقش هستند. نقشی را از لیست انتخاب کنید.
     form:
       username:
+        labelText: نام کاربری
         placeholder: "مثال. jsmith"
       password:
         labelText: رمز عبور
       name:
+        labelText: نام نمایشی
         placeholder: "مثال. John Smith"
       type:
         labelText: نوع حساب
       description:
         labelText: توضیح
         placeholder: "مثال. این حساب متعلق به آقای حسینی است"
+  editGroup:
+    header: ویرایش گروه
+  modal:
+    password: تغییر رمز عبور
+appDetailPage:
+  header: "برنامه: {appName}"
+  endpoints:
+    protocol: پروتکل
+  answers:
+    title: پاسخ‌ها
+    variable: متغیر
+  notes:
+    title: یادداشت ها
+    detail: 'دستورالعمل نحوه استفاده از این برنامه'
+  services:
+    title: سرویس ها
+    nodata: هیچ سرویس برای این برنامه ایجاد نشده است.
+alertPage:
+  create: ایجاد
+  save: ذخیره
+  cluster: خوشه
+  newOrEdit:
+    whenA: هنگامی که یک
+    whenAn: هنگامی که یک
+    sendA: ارسال یک
+    to: به
+    alert: هشدار
+    is: هست
+    lessThan: کمتر از
+    and: و
+    critical: بحرانی
+    info: اطلاعات
+    normal: عادی
+    warning: هشدار
+    notReady: آماده نیست
+    notRunning: در حال اجرا نیست
+    notScheduled: زمانبندی نشده
+    removeAlert: حذف این هشدار
+podSecurityPoliciesPage:
+  index:
+    table:
+      name: نام
+  addPodSecurityPolicy: اضافه کردن خط مشی
+  editPodSecurityPolicy: ویرایش خط مشی
+  detail:
+    header: خطی مشی
+  saveEdit: ویرایش
+  saveNew: ایجاد
+  new:
+    errors:
+      nameReq: نام الزامی است.
+    form:
+      name:
+        labelText: نام
+rolesPage:
+  headers:
+    global: سراسری
+    cluster: خوشه‌ها
+  saveEdit: ویرایش
+  saveNew: ایجاد
+  new:
+    errors:
+      nameReq: نام الزامی است.
+    form:
+      locked:
+        disabled: "خیر"
+      allow:
+        create: ساختن
+        delete: پاک کردن
 apiPage:
+  header: API و کلیدها
   table:
     state: وضعیت
     description: توضیح
     created: ساخته شد
 authPage:
+  saml:
+    accessEnabled:
+      header: احراز هویت
+      disable: غیر فعال سازی کنترل دسترسی
+    enabled:
+      authenticated:
+        header:
+          text: احراز هویت
+      groupsField: 'گروه‌ها:'
+      userName: 'نام کاربری:'
+      userId: 'شناسه کاربر:'
   shibboleth:
     enabled:
-      header: "{providerName} فعال است"
-      unrestricted: "{appName} تنظیم شده تا به هر کاربر {providerName} دسترسی دهد."
       authenticated:
         header:
           text: اهراز هویت
@@ -129,7 +280,6 @@ authPage:
     disabled:
       header: '1. تنظیم حساب Shibboleth'
       label: "{providerName} تنظیم نشده است"
-      warning: "{appName} می تواند تنظیم شود تا دسترسی به کاربران و گروه های {providerName} را محدود کند. این انکان فعلا تنظیم نشده, بنابراین هر شخصی با دسترسی به این صفحه (یا API) به سیستم کنترل کامل دارد."
       name:
         labelText: نمایش فیلد نام
       username:
@@ -147,13 +297,11 @@ authPage:
     providerName:
       shibboleth: سیستم تشخیص هویت
   root:
-    header: Access Control
+    header: کنترل دسترسی
   github:
     standard: سرویس گیت هاب
     enterprise: نسخه تجاری گیت هاب
     header:
-      enabled:
-        label: "{github} فعال است"
       disabled:
         label: GitHub تنظیم نشده است
     authenticated:
@@ -169,15 +317,13 @@ authPage:
       header: "1. تنظیم یک برنامه GitHub"
       ul:
         li1:
-          text: 'برای GitHub استاندارد, <a href="https://github.com/settings/developers" target="_blank">کلیک کنید</a>.'
           ul:
             li1: "برای Github Enterprise, وارد حساب کاربری خود شوید. ابتدا روی تنظیمات کلیک کرده, سپس وارد برنامه ها شوید."
         li2:
           text: ' "Register new application" را انتخاب و فرم را پر کنید:'
           ul:
             li1: '<b>نام Application :</b> <span class="text-muted">Anything you like, مثال. My {appName}</span>'
-            li2: آدرس صفحه اصلی
-            li3: '<b>توضیحات Application:</b> <span class="text-muted">پر کردن این گزینه دلخواه است</span>'
+            li2: 'آدرس صفحه اصلی'
         li3:
           text: '"ثبت Application" را انتخاب کنید '
       form:
@@ -196,27 +342,11 @@ authPage:
         pre: اهراز هویت with GitHub
         post: در انتظار پاسخ از GitHub
   azuread:
-    header:
-      enabled: 'اهراز هویت Azure AD <b>فعال است</b>'
-    subtext:
-      disabled: '{appName} می تواند تنظیم شود تا دسترسی به برخی حساب ها که در دیتابیس تعریف شده اند را محدود کند. این کار هنوز انجام نشده، بنابراین هر شخصی با دسترسی به این صفحه،  به سیستم کنترل کامل دارد.'
     enabled:
-      warning: '<b class="text-danger">هشدار:</b> غیر فعال سازی کنترل دسترسی دسترسی کامل به {appName} را به هر شخصی که به این صفحه دسترسی پیدا کند می دهد'
       reallyDisable: 'آیا مطمئن هستید؟  برای غیر فعال سازی کنترل دسترسی دوباره کلیک کنید'
       promptDisable: غیر فعال سازی کنترل دسترسی
     configure:
       header: '1. تنظیم Azure AD Account'
-      clientId:
-        label: شناسه کلاینت
-      domain:
-        label: دامنه
-        placeholder: مثال. youcompany.onmicrosoft.com
-      adminAccountUsername:
-        label: نام کاربری مدیر
-        placeholder: مثال. rancher-admin
-        help: کاربری که می تواند اطلاعات کاربران دیگر را بخواند
-      adminAccountPassword:
-        label: رمز عبور مدیر
     test:
       header: '2. تست و فعال سازی اعراز هویت'
       username:
@@ -257,8 +387,6 @@ authPage:
       buttonText:
         pre: فعال سازی اهراز هویت لوکال
         post: 'در حال فعال سازی...'
-  0:
-    header: کنترل دسترسی
 catalogPage:
   index:
     certified:
@@ -285,12 +413,95 @@ certificatesPage:
         placeholder: مثال. mydomain.com
       description:
         placeholder: مثال. EV cert for mydomain.com
+clusterPage:
+  edit: ویرایش خوشه
+projectsPage:
+  members:
+    kind:
+      label: نوع
+    name:
+      label: نام
+    role:
+      label: نقش
+clustersPage:
+  header: خوشه‌ها
+  newCluster: افزودن خوشه
+  newTemplate: افزودن الگو
+  newClusterName: "افزودن خوشه: {name}"
+  editClusterName: "ویرایش خوشه: {name}"
+  launch:
+    new: افزودن خوشه
+  cluster:
+    label: نام خوشه
+  cpu:
+    label: پردازشگر
+  memory:
+    label: رم
+clusterRibbonNav:
+  title: خوشه‌های اخیر
+containerPage:
+  linksTab:
+    header: پیوند‌ها
 containersPage:
   table:
     sparkPrefixCpu: "پردازشگر: "
     sparkPrefixMemory: "حافظه: "
     sparkPrefixNetwork: "شبکه: "
     sparkPrefixStorage: "محل ذخیره: "
+clusterDashboard:
+  sections:
+    cluster: معیارهای خوشه
+  value: مقدار
+  scheduler: زمانبند
+ingressResponse:
+  host: هاست
+  responseTime: زمان پاسخ
+editDns:
+  externalTrafficPolicy:
+    cluster: خوشه
+globalRegistryPage:
+  config:
+    databaseRequestCpu:
+      placeholder: مثال 1000
+    databaseLimitCpu:
+      placeholder: مثال 1000
+    databaseRequestMemory:
+      placeholder: مثال 1000
+    databaseLimitMemory:
+      placeholder: مثال 1000
+    redisRequestCpu:
+      placeholder: مثال 1000
+    redisLimitCpu:
+      placeholder: مثال 1000
+    redisRequestMemory:
+      placeholder: مثال 1000
+    redisLimitMemory:
+      placeholder: مثال 1000
+    redis:
+      external:
+        port:
+          placeholder: مثال 6379
+        coreDatabaseIndex:
+          placeholder: مثال 0
+        jobserviceDatabaseIndex:
+          placeholder: مثال 1
+        registryDatabaseIndex:
+          placeholder: مثال 2
+globalDnsPage:
+  entriesPage:
+    table:
+      name: نام
+    config:
+      project: پروژه‌ها
+  providersPage:
+    table:
+      name: نام
+    config:
+      zone:
+        placeholder: عمومی
+#If you change translations here also change the translation in app/utils/constants.js under the FALLBACK_TRANSLATIONS key
+#those are present in case we have an error in the app and can not load the translations file
+#the error page will at least make a little sense
 failWhalePage:
   header: خطا
   reloadButton: |
@@ -300,8 +511,19 @@ haPage:
   setup:
     link: به راهنما مراجعه کنید
     suffix: " برای اطلاع رسانی در مورد راه اندازی و استفاده."
+  table:
+    clustered: خوشه‌بندی شده
+nodesPage:
+  editCluster: ویرایش خوشه
+  table:
+    clusterName: خوشه
 hostsPage:
   addContainer: افزودن Container
+  new:
+    addCluster:
+      label: "گزینه‌های خوشه"
+      cluster:
+        label: خوشه
   hostPage:
     portsTab:
       table:
@@ -325,6 +547,9 @@ loginPage:
     500: "Internal Server Error"
 machinePage:
   inactive: غیر فعال
+#If you change translations here also change the translation in app/utils/constants.js under the FALLBACK_TRANSLATIONS key
+#those are present in case we have an error in the app and can not load the translations file
+#the error page will at least make a little sense
 notFoundPage:
   header: "چنین صفحه ای وجود ندارد"
   linkTo: خانه
@@ -373,31 +598,11 @@ waitingPage:
   hosts:
     setup:
       kubernetes: در حال تنظیم Kubernetes
+##############################
+#Partials
+##############################
 ldap:
   header:
-    enabled:
-      label: "{providerName} فعال است"
-      required: |
-        {appName} تنظیم شده تا دسترسی را بدهد به {groups, plural,
-        =0 {no groups}
-        =1 {# group}
-        other {# groups}
-        } and {users, plural,
-        =0 {no users}
-        =1 {# user}
-        other {# users}
-        }.
-      restricted: |
-        {appName} تنظیم شده تا دسترسی را به اعضای محیط بدهد, {groups, plural,
-        =0 {no groups}
-        =1 {# group}
-        other {# groups}
-        } and {users, plural,
-        =0 {no users}
-        =1 {# user}
-        other {# users}
-        }.
-      unrestricted: "{appName} تنظیم شده تا دسترسی را به هر کاربر {providerName} بدهد."
     disabled:
       label: "{providerName} تنظیم نشده"
   accessEnabled:
@@ -418,10 +623,8 @@ ldap:
       name: "فیلد نام:"
       search: "فیلد جستجو:"
     disable:
-      warning: '<b class="text-danger">هشدار:</b> غیر فعال سازی کنترل دسترسی دسترسی کامل به {appName} را به هر شخصی که به این صفحه دسترسی پیدا کند می دهد'
       confirmDisable:
         pre: غیر فعال سازی کنترل دسترسی
-        post: "آیا مطمئن هستید؟  برای غیر فعال سازی کنترل دسترسی دوباره کلیک کنید"
   accessConfig:
     header: "1. تنظیم یک سرور {providerName}"
     port:
@@ -450,16 +653,23 @@ servicePartial:
     inactive:
       start: شروع
 catalogSettings:
+  currentCluster: خوشه
+  globalCatalog: سراسری
   more:
     addActionLabel: افزودن Catalog
     name:
       label: نام
       placeholder: مثال. mycatalog
-    url:
-      placeholder: 'مثال. https://github.com/mycompany/mycatalog.git'
     branch:
       label: شاخه
       placeholder: 'مثال. master'
+clusterNew:
+  header: نوع خوشه را انتخاب کنید
+  name:
+    label: نام خوشه
+    required: 'وارد کردن "نام خوشه" اجباری است'
+  driverLabels:
+    import: وارد کردن خوشه‌ی موجود
 confirmDelete:
   cancelAction: لغو
 containerLogs:
@@ -526,6 +736,12 @@ stackHeader:
   outputs: خروجی ها
 formatIp:
   noIp: هیچ یک
+formMembersGlobalAccess:
+  title: اعضا
+  table:
+    name: نام
+    accessType: نوع دسترسی
+    prompt: یک مقدار را انتخاب کنید...
 formCommand:
   command:
     label: دستور
@@ -577,6 +793,23 @@ formEngineOpts:
   engineRegistryMirror:
     addActionLabel: افزودن Registry Mirror
     valuePlaceholder: مثال. https://my-mirror.example.com:5000
+formGlobalRoles:
+  mode:
+    admin:
+      label: مدیر
+    user:
+      label: کاربر استاندارد
+  role:
+    catalogs-manage:
+      label: پیکربندی کاتالوگ‌ها
+    settings-manage:
+      label: مدیریت تنظیمات
+    users-manage:
+      label: مدیریت کاربران
+    catalogs-use:
+      label: استفاده از کاتالوگ‌ها
+    base:
+      label: دسترسی ورود
 formHealthCheck:
   checkType:
     none: هیچ یک
@@ -666,20 +899,6 @@ hostSettings:
       آیا مطمئن هستید تمام هاست های شما به  <code>{activeValue}</code> دسترسی خواهند داشت ?<br/> این آدرس به نظر یک آی پی خصوصی یا داخلی است.
 identityBlock:
   loading: در حال بارگزاری...
-infoMultiStats:
-  connecting: در حال اتصال
-  cpuSection:
-    system: سیستم
-    user: کاربر
-  networkSection:
-    labelText: شبکه
-    receive: دریافت
-  memorySection:
-    labelText: حافظه
-    used: استفاده شده
-  storageSection:
-    read: خواندن
-    write: نوشتن
 inputIdentity:
   placeholder:
     github: افزودن یک کاربر GitHub یا نام سازمان
@@ -725,6 +944,8 @@ modalEditDriver:
 modalProcessError:
   cause: "علت:"
   close: بستن
+modalShortcuts:
+  global: سراسری
 modalWelcome:
   header: به {appName} خوش آمدید!
   closeModal: بستن
@@ -746,14 +967,15 @@ newCatalog:
   version:
     prompt: انتخاب یک نسخه...
 newContainer:
-  upgrade:
-    container: ارتقای Container
-  selectUpgrade: یک یا چند سرویس برای ارتقا انتخاب کنید.
-  saveUpgrade: ارتقا
   name:
     placeholder: مثال. myapp
   description:
     placeholder: مثال. My Application
+nodeDriver:
+  amazoneks:
+    associateWorkerNodePublicIp:
+      radio:
+        default: "true"
 pageFooter:
   notARelease: (نسخه آزمایشی)
   issues: گزارش مشکل
@@ -818,23 +1040,29 @@ waitKubernetes:
   addHost: 'حداقل یک هاست اضافه کنید'
   activateHost: 'در انتظار فعال سازی هاست'
   startServices: 'در حال شروع سرویس ها'
+##############################
+#Mixins
+##############################
 containerChoices:
   hostGroup: "هاست: {name}"
   unknownHost: "هاست: ???"
+##############################
+#Navigation
+##############################
 nav:
-  environment:
-    label: محیط
-    all: همه محیط ها
-    your: محیط های شما
-    selected: محیط انتخاب شده
   catalog:
     all: همه
     library: کتابخانه
   infra:
     storagePage: محل ذخیره
+  admin:
+    tab: سراسری
   user:
     label: "منوی کاربر: {username}"
     logout: خروج
+##############################
+#Resource Actions
+##############################
 action:
   activate: فعال سازی
   clone: همانند سازی
@@ -855,6 +1083,9 @@ action:
   viewGraph: مشاهده گراف
   viewInApi: viewGraph in API
   viewInstance: مشاهده Instance
+##############################
+#Model Properties
+##############################
 model:
   account:
     kind:
@@ -878,3 +1109,14 @@ model:
       owner: ماکل
       readonly: فقط قابل خواندن
       restricted: دسترسی قطع شده
+volumeSource:
+  rbd:
+    title: Ceph RBD
+  storageos:
+    title: StorageOS
+  customLogPath:
+    mountPath:
+      label: مسیر گزارش‌ها
+    logFormat:
+      label: قالب گزارش
+      useCustomRegex: از یک Regex Fluentd سفارشی استفاده کنید

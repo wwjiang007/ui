@@ -1,49 +1,57 @@
-{{#if (and (eq step 2) (eq originalCluster.state "pending"))}}
-  <div class="mt-20">
-    {{t 'clusterNew.import.command.instructions'
-      appName=settings.appName
-      docsBase=settings.docsBase
-      htmlSafe=true
-    }}
-  </div>
+{{#if (and (eq step 1) (or isK3sCluster isRke2Cluster))}}
+  <AccordionList @showExpandAll={{false}} as |al expandFn|>
+    <AccordionListItem
+      @title={{t "managedImportClusterInfo.title" provider=cluster.displayProvider}}
+      @detail={{t "managedImportClusterInfo.detail" provider=cluster.displayProvider}}
+      @expandAll={{al.expandAll}}
+      @everExpanded={{true}}
+      @expandOnInit={{true}}
+      @expanded={{true}}
+      @expand={{action expandFn}}
+    >
+      <ManagedImportClusterInfo
+        @configField={{configField}}
+        @cluster={{model.cluster}}
+        @originalCluster={{model.originalCluster}}
+        @editing={{isEdit}}
+        @errors={{errors}}
+      />
+    </AccordionListItem>
+  </AccordionList>
 
-  <div class="copy-pre mt-20 mb-20">
-    {{#if loading}}
-      <div class="text-center"><i class="icon icon-spinner icon-spin"></i> {{t 'generic.loading'}}</div>
-    {{else}}
-      {{copy-to-clipboard clipboardText=token.command tagName="div" classNames="copy-to-pre"}}
-      <pre id="registration-command" style="font-size: 14px;">{{token.command}}</pre>
-    {{/if}}
-  </div>
-
-  <div class="mt-20">
-    {{t 'clusterNew.import.command.instructionsInsecure'
-      appName=settings.appName
-      docsBase=settings.docsBase
-      htmlSafe=true
-    }}
-  </div>
-
-  <div class="copy-pre mt-20 mb-20">
-    {{#if loading}}
-      <div class="text-center"><i class="icon icon-spinner icon-spin"></i> {{t 'generic.loading'}}</div>
-    {{else}}
-      {{copy-to-clipboard clipboardText=token.insecureCommand tagName="div" classNames="copy-to-pre"}}
-      <pre id="registration-command" style="font-size: 14px;">{{token.insecureCommand}}</pre>
-    {{/if}}
-  </div>
+  <TopErrors @errors={{errors}} />
+  <TopErrors @errors={{otherErrors}} />
+  <TopErrors @errors={{clusterErrors}} />
+  <SaveCancel
+    @save={{action "driverSave"}}
+    @editing={{isEdit}}
+    @cancel={{action "close"}}
+  />
+{{else if (and (eq step 2) (eq originalCluster.state "pending"))}}
+  <ImportCommand @cluster={{cluster}}/>
 
   {{#if isEdit}}
     {{top-errors errors=otherErrors}}
     {{top-errors errors=clusterErrors}}
-    {{save-cancel save="driverSave" editing=true cancel="close"}}
+    {{save-cancel
+      save=(action "driverSave")
+      editing=true
+      cancel=(action "close")
+    }}
   {{else}}
     <div class="footer-actions">
-      <button {{action "close"}} class="btn bg-primary">{{t 'clusterNew.rke.done'}}</button>
+      <button class="btn bg-primary" type="button" {{action "close"}}>
+        {{t "clusterNew.rke.done"}}
+      </button>
     </div>
   {{/if}}
 {{else}}
+  {{top-errors errors=errors}}
   {{top-errors errors=otherErrors}}
   {{top-errors errors=clusterErrors}}
-  {{save-cancel save="driverSave" editing=isEdit cancel="close"}}
+  {{save-cancel
+    save=(action "driverSave")
+    editing=isEdit
+    cancel=(action "close")
+  }}
 {{/if}}

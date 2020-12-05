@@ -9,8 +9,8 @@ export default Route.extend({
 
     return hash({
       persistentVolumes: clusterStore.findAll('persistentVolume'),
-      storageClasses: clusterStore.findAll('storageClass'),
-      pvc: store.find('persistentVolumeClaim', params.volume_id),
+      storageClasses:    clusterStore.findAll('storageClass'),
+      pvc:               store.find('persistentVolumeClaim', params.volume_id),
     });
   },
 });

@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col span-8">
+    <label class="acc-label" for="cloud-credential-selection">
+      {{t "formAuthCloudCredential.label"}}
+    </label>
+    <div>
+      <select
+        id="cloud-credential-selection"
+        class="form-control inline-block"
+        onchange={{action
+          "setCloudCredential"
+          value="target.value"
+        }}
+        disabled={{if showAddCloudCredential true}}
+        style="max-width: 80%;"
+      >
+        <option value="" selected="true">
+          {{t "formAuthCloudCredential.selectCreds.prompt"}}
+        </option>
+        {{#each cloudCredentials as |choice|}}
+          <option
+            value={{choice.id}}
+            selected={{eq (get primaryResource cloudCredentialKey) choice.id}}
+          >
+            {{choice.displayName}}
+          </option>
+        {{/each}}
+      </select>
+      <button
+        class="btn btn-sm bg-default inline-block"
+        style="margin-top: -5px;"
+        disabled={{if showAddCloudCredential true}} type="button" {{action "addCloudCredential"}}
+      >
+        {{t "formAuthCloudCredential.add"}}
+      </button>
+    </div>
+  </div>
+</div>
+{{#if showAddCloudCredential}}
+  <div class="row">
+    {{cru-cloud-credential
+      mode=mode
+      driverName=driverName
+      region=region
+      parseAndCollectErrors=parseAndCollectErrors
+      disableHeader=true
+      doneSavingCloudCredential=(action "doneSavingCloudCredential")
+      cancelAdd=(action "cancleNewCloudCredential")
+    }}
+  </div>
+{{else}}
+  {{#unless hideSave}}
+    {{save-cancel
+      saveDisabled=(unless (get primaryResource cloudCredentialKey) true)
+      save=progressStep
+      cancel=cancel
+      createLabel=createLabel
+      savingLabel=savingLabel
+    }}
+  {{/unless}}
+{{/if}}

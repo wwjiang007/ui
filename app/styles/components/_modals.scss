@@ -56,6 +56,13 @@ $modal-overlay                       : rgba($light-grey, 0.75) !default;
   padding: 20px;
   margin-bottom: 20px;
 
+  &.modal-edit-setting {
+    .container-setting {
+      max-height: 70vh !important;
+      overflow-y: scroll;
+    }
+  }
+
   &.large-modal {
     &.modal-container {
       width: calc(100% - 40px);
@@ -115,5 +122,18 @@ $modal-overlay                       : rgba($light-grey, 0.75) !default;
     margin: 30px;
     padding-top: 15px;
     border-top: solid thin $light-grey;
+  }
+
+  .modal-yaml {
+    max-width: calc(100vw - 100px);
+  }
+
+  table {
+    thead {
+      .fixed-header,
+      .fixed-header-actions {
+        background: transparent;
+      }
+    }
   }
 }

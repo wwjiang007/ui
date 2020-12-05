@@ -1,17 +1,42 @@
 import { later } from '@ember/runloop';
-import Resource from 'ember-api-store/models/resource';
+import Resource from '@rancher/ember-api-store/models/resource';
 import { computed, get, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import C from 'ui/utils/constants';
 
 export default Resource.extend({
-  type:         'setting',
   modalService: service('modal'),
   settings:     service(),
-  allowed:      C.SETTING.ALLOWED,
+  type:         'setting',
   canRemove:    false,
 
+  isDefault: computed('value', 'default', function() {
+    return get(this, 'default') === get(this, 'value');
+  }),
+
+  canRevert: computed('default', 'isDefault', function() {
+    return !isEmpty(get(this, 'default')) && !get(this, 'isDefault');
+  }),
+
+  canEdit: computed('links.update', 'id', function() {
+    const id = get(this, 'id');
+
+    return !!get(this, 'links.update') && id !== 'cacerts';
+  }),
+
+  availableActions: computed('actionLinks.{remove,update}', 'canRevert', function() {
+    return [
+      {
+        label:     'action.revert',
+        icon:      'icon icon-history',
+        action:    'revert',
+        enabled:   get(this, 'canRevert'),
+        altAction: 'bypassRevert'
+      },
+    ];
+  }),
+  allowed:      C.SETTING.ALLOWED,
   actions: {
     edit() {
       let key = get(this, 'id');
@@ -19,46 +44,36 @@ export default Resource.extend({
       let details = this.get('allowed')[key];
 
       this.get('modalService').toggleModal('modal-edit-setting', {
-        key: key,
-        descriptionKey: `dangerZone.description.${get(this, 'id')}`,
-        kind: details.kind,
-        obj: obj,
-        canDelete: obj && !obj.get('isDefault'),
+        key,
+        descriptionKey: `dangerZone.description.${ get(this, 'id') }`,
+        kind:           details.kind,
+        options:        details.options,
+        canDelete:      obj && !obj.get('isDefault'),
+        obj,
       });
     },
+
     revert() {
       let key = get(this, 'id');
       let details = this.get('allowed')[key];
 
       this.get('modalService').toggleModal('modal-revert-setting', {
         setting: this,
-        kind: details.kind,
+        kind:    details.kind,
       });
     },
     bypassRevert() {
-      set(this, 'value', get(this, 'default')||'');
+      set(this, 'value', get(this, 'default') || '');
 
       this.save();
     },
   },
 
-  isDefault: computed('value', 'default', function() {
-    return get(this, 'default') === get(this, 'value');
-  }),
-
-  canRevert: computed('default', function() {
-    return !isEmpty(get(this, 'default')) && !get(this, 'isDefault');
-  }),
-
   delete() {
     return this._super().then((res) => {
-      later(this,'reload',500);
+      later(this, 'reload', 500);
+
       return res;
     });
   },
-  availableActions: computed('actionLinks.{update,remove}', function() {
-    return [
-      { label: 'action.revert',       icon: 'icon icon-history',          action: 'revert',       enabled: get(this, 'canRevert'),  altAction: 'bypassRevert' },
-    ];
-  }),
 });

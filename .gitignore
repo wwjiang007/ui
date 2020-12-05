@@ -6,13 +6,15 @@
 
 # dependencies
 /node_modules
-/bower_components
 
 # misc
+/.env*
+/.pnp*
 /.sass-cache
 /connect.lock
 /coverage/*
 /libpeerconnection.log
+/.log*
 npm-debug.log
 testem.log
 .DS_Store
@@ -31,6 +33,7 @@ GRTAGS
 GTAGS
 *.code-workspace
 .dir-locals.el
+.nvmrc
 
 
 *.swp
@@ -42,3 +45,5 @@ GTAGS
 
 *.org
 yarn-error.log
+!Dockerfile.dapper
+Dockerfile.dapper*

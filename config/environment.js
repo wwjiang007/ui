@@ -3,9 +3,6 @@ var pkg  = require('../package.json');
 var fs   = require('fs');
 var YAML = require('yamljs');
 
-var mode = process.env.UI_MODE || 'oss'; // 'caas' or 'oss'
-var signup = process.env.UI_SIGNUP !== 'false'; // set to false to hide signup
-
 // host can be an ip "1.2.3.4" -> https://1.2.3.4:30443
 // or a URL+port
 function normalizeHost(host,defaultPort) {
@@ -55,7 +52,7 @@ module.exports = function(environment) {
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
@@ -65,11 +62,11 @@ module.exports = function(environment) {
 
 
     minifyCSS: {
-        enabled: false
+      enabled: false
     },
 
     minifyJS: {
-        enabled: false
+      enabled: false
     },
 
     contentSecurityPolicy: {
@@ -82,7 +79,8 @@ module.exports = function(environment) {
       'frame-src':  "'self' releases.rancher.com",
 
       // Allow connect to anywhere, for console and event stream socket
-      'connect-src': '*'
+      'connect-src': '*',
+      'unsafe-eval': "'self' releases.rancher.com"
     },
 
     APP: {
@@ -90,9 +88,6 @@ module.exports = function(environment) {
       // when it is created
       version: pkg.version,
       appName: 'Rancher',
-      mode: mode,
-      isCaas: mode === 'caas',
-      caasSignup: signup,
       environment: environment,
       baseAssets: '/',
 
@@ -110,9 +105,7 @@ module.exports = function(environment) {
       projectSubscribeEndpoint: '/v3/projects/%PROJECTID%/subscribe',
       magicEndpoint: '/r',
 
-      // @TODO-2.0
       telemetryEndpoint: '/v1-telemetry',
-      webhookEndpoint: '/v1-webhooks',
       kubernetesBase: '/k8s',
       kubectlEndpoint: '/r/projects/%PROJECTID%/kubectld:8091/v1-kubectl',
       kubernetesDashboard: '/k8s/clusters/%CLUSTERID%/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/',
@@ -142,6 +135,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
   }
 
   if (process.env.FINGERPRINT) {
@@ -175,3 +169,19 @@ module.exports = function(environment) {
 
   return ENV;
 };
+
+// host can be an ip "1.2.3.4" -> https://1.2.3.4:30443
+// or a URL+port
+function normalizeHost(host, defaultPort) {
+  if ( host.indexOf('http') === 0 ) {
+    return host;
+  }
+
+  if ( host.indexOf(':') >= 0 || defaultPort === 443 ) {
+    host = `https://${  host }`;
+  } else {
+    host = `https://${  host  }${ defaultPort ? `:${ defaultPort }` : '' }`;
+  }
+
+  return host;
+}

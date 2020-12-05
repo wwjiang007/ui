@@ -1,0 +1,24 @@
+<div class="container-header-text">
+  <h3>
+    {{#if (eq resources.length 1)}}
+      {{t
+        "drainNode.titleOne"
+        name=resources.firstObject.displayName
+      }}
+    {{else}}
+      {{t "drainNode.titleMultiple" count=resources.length}}
+    {{/if}}
+  </h3>
+  <hr/>
+</div>
+
+<section class="p-20 pt-0">
+  {{drain-node selection=selection}}
+</section>
+
+{{save-cancel
+  editing=true
+  editLabel="drainNode.action"
+  save=(action "drain")
+  cancel=(action "cancel")
+}}

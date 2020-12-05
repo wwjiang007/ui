@@ -1,14 +1,3 @@
-// banners
-$banner-default                      : lighten($light-grey, 5) !default;
-$banner-disabled                     : lighten($mid-grey, 35) !default;
-$banner-primary                      : lighten($primary, 63) !default;
-$banner-secondary                    : lighten($secondary, 65) !default;
-$banner-success                      : lighten($success, 55) !default;
-$banner-info                         : lighten($info, 30) !default;
-$banner-warning                      : lighten($warning, 45) !default;
-$banner-error                        : lighten($error, 35) !default;
-$banner-color                        : $secondary !default;
-
 .banner {
   display: table;
   position: relative;
@@ -186,6 +175,10 @@ $banner-color                        : $secondary !default;
       &:last-child {
         border: 0;
       }
+
+      .hr {
+        border-bottom: 1px dashed #78C9CF;
+      }
     }
     &.basics-stack-detail {
       span[class*='tag-'] {
@@ -193,6 +186,16 @@ $banner-color                        : $secondary !default;
           margin-right: 5px;
       }
 
+    }
+    .block .text-small {
+      font-size: 0.7em;
+    }
+
+    span.cluster-template-revision-upgrade-notification {
+      height: 0px;
+      display: inline-block;
+      margin-top: -1.5%;
+      vertical-align: top;
     }
   }
 }

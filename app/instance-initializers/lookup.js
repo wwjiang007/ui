@@ -5,11 +5,11 @@ export function initialize(application) {
   };
 
   window.lc = function(name) {
-    return application.lookup('controller:'+name);
+    return application.lookup(`controller:${ name }`);
   };
 
   window.ls = function(name) {
-    return application.lookup('service:'+name);
+    return application.lookup(`service:${ name }`);
   };
 
   window.s  = application.lookup('service:store');
@@ -19,5 +19,5 @@ export function initialize(application) {
 
 export default {
   name: 'lookup',
-  initialize: initialize,
+  initialize,
 };

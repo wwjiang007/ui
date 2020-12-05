@@ -6,5 +6,5 @@ export function initialize(application) {
 
 export default {
   name: 'inject-router',
-  initialize: initialize
+  initialize
 };

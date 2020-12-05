@@ -1,0 +1,242 @@
+<section class="horizontal-form container-fluid">
+  {{#if justCreated}}
+    <h2>{{t "editApiKey.title.justCreated"}}</h2>
+
+    <hr/>
+
+    <div>
+      <label class="acc-label block">
+        {{t "apiPage.currentEndpoint"}}
+      </label>
+      <code class="p-10">
+        <a href="{{linkEndpoint}}" target="_blank" rel="nofollow noreferrer">{{displayEndpoint}}</a>
+      </code>
+      {{copy-to-clipboard
+        color="bg-transparent"
+        clipboardText=linkEndpoint
+      }}
+    </div>
+
+    <div>
+      <label class="acc-label block mt-20">
+        {{t "editApiKey.accessKey"}}:
+      </label>
+      <code class="p-10">{{clone.name}}</code>
+      {{copy-to-clipboard
+        color="bg-transparent"
+        clipboardText=clone.name
+      }}
+    </div>
+
+    <div>
+      <label class="acc-label block mt-20">
+        {{t "editApiKey.secretKey"}}:
+      </label>
+      <code class="p-10">{{displayPassword}}</code>
+      {{copy-to-clipboard
+        color="bg-transparent"
+        clipboardText=displayPassword
+      }}
+    </div>
+
+    <p>{{t "editApiKey.basicAuth"}}</p>
+
+    <div>
+      <label class="acc-label block">
+        {{t "editApiKey.token"}}:
+      </label>
+      <code class="p-10">{{clone.token}}</code>
+      {{copy-to-clipboard
+        color="bg-transparent"
+        clipboardText=clone.token
+      }}
+    </div>
+
+    <div class="banner bg-warning">
+      <div class="banner-icon">
+        <i class="icon icon-info"></i>
+      </div>
+      <div class="banner-message">
+        <p>{{t "editApiKey.saveWarning1"}}<br/>{{t "editApiKey.saveWarning2"}}</p>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button
+        class="bg-primary" type="button" {{action "cancel"}}
+      >
+        {{t "generic.closeModal"}}
+      </button>
+    </div>
+  {{else}}
+    <h2>{{t (if editing "editApiKey.title.editing" "editApiKey.title.new")}}</h2>
+    <hr/>
+
+    <div class="row">
+      <div class="col span-12">
+        <label class="acc-label">{{t "generic.description"}}</label>
+        {{textarea-autogrow
+          id="api-description"
+          value=model.description
+          classNames="form-control no-resize description"
+          rows="1"
+          placeholder="editApiKey.description.placeholder"
+        }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col span-6">
+        <label class="acc-label">
+          {{t "editApiKey.ttl.label"}}
+        </label>
+        {{#if showSimpleExpire}}
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=expire
+                value="never"
+              }}&nbsp;
+              {{t "editApiKey.ttl.never"}}
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=expire
+                value="day"
+              }}&nbsp;
+              {{t "editApiKey.ttl.day"}}
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=expire
+                value="month"
+              }}&nbsp;
+              {{t "editApiKey.ttl.month"}}
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=expire
+                value="year"
+              }}&nbsp;
+              {{t "editApiKey.ttl.year"}}
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=expire
+                value="custom"
+              }}&nbsp;
+              {{t "editApiKey.ttl.custom"}} - {{ttlCustomMin}}
+              {{input-number
+                disabled=(not (eq expire "custom"))
+                min=0
+                max=ttlCustomMax
+                classNames="form-control inline-block initial-width"
+                value=customTTL
+              }}
+              <select
+                disabled={{not (eq expire "custom")}}
+                style="width: 100px"
+                class="form-control inline-block"
+                onchange={{action (mut ttlUnit) value="target.value"}}
+              >
+                {{#each ttlUnitOptions as |ttlUnitOption|}}
+                  <option
+                    value="{{ttlUnitOption}}"
+                    selected={{eq ttlUnit ttlUnitOption}}
+                  >
+                    {{ttlUnitOption}}
+                  </option>
+                {{/each}}
+              </select>
+            </label>
+          </div>
+        {{else}}
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=complexExpire
+                value="max"
+              }}&nbsp;
+              {{t "editApiKey.ttl.max.label" time=friendlyMaxTTL}}
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              {{radio-button
+                selection=complexExpire
+                value="custom"
+              }}&nbsp;
+              {{t "editApiKey.ttl.custom"}} - {{ttlCustomMin}}
+              {{input-number
+                disabled=(eq complexExpire "max")
+                min=0
+                max=ttlCustomMax
+                classNames="form-control inline-block initial-width"
+                value=customTTL
+              }}
+              <select
+                disabled={{eq complexExpire "max"}}
+                style="width: 100px"
+                class="form-control inline-block"
+                onchange={{action (mut ttlUnit) value="target.value"}}
+              >
+                {{#each ttlUnitOptions as |ttlUnitOption|}}
+                  <option
+                    value="{{ttlUnitOption}}"
+                    selected={{eq ttlUnit ttlUnitOption}}
+                  >
+                    {{ttlUnitOption}}
+                  </option>
+                {{/each}}
+              </select>
+            </label>
+          </div>
+        {{/if}}
+      </div>
+      <div class="col span-6">
+        <label class="acc-label">
+          {{t "editApiKey.scope"}}
+        </label>
+        <select
+          class="form-control"
+          onchange={{action (mut model.clusterId) value="target.value"}}
+        >
+          <option
+            value=""
+            selected=true
+          >
+            {{t "editApiKey.scopeSelect.prompt"}}
+          </option>
+          {{#each allClusters as |choice|}}
+            <option
+              value="{{choice.value}}"
+              selected={{eq choice.value value}}
+            >
+              {{choice.label}}
+            </option>
+          {{/each}}
+        </select>
+        <p class="help-block">
+          {{t "editApiKey.scopeSelect.helpText" htmlSafe=true}}
+        </p>
+      </div>
+    </div>
+
+
+    <div class="footer-actions">
+      {{save-cancel
+        editing=editing
+        save=(action "save")
+        cancel=(action "cancel")
+      }}
+    </div>
+  {{/if}}
+</section>

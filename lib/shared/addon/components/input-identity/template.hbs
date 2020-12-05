@@ -1,29 +1,38 @@
 <form {{action "add" on="submit"}}>
   <div class="input-group">
-
     {{principal-search
-        add="add"
-        filter=filter
-        includeLocal=includeLocal
-        principal=addInput
-        selectExact="selectExact"
-        selectExactOnBlur=selectExactOnBlur
-        useLabel=true
+      add=(action "add")
+      filter=filter
+      includeLocal=includeLocal
+      principal=addInput
+      selectExact=(action "selectExact")
+      selectExactOnBlur=selectExactOnBlur
+      useLabel=true
+      searchOnlyGroups=searchOnlyGroups
     }}
-
     <div class="input-group-btn">
       {{#if showDropdown}}
-        <button type="button" class="btn bg-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="icon icon-chevron-down"></i></button>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" style="min-width: 250px; max-height: 300px; overflow-y: auto;">
-          <li role="presentation" class="dropdown-header">{{dropdownLabel}}</li>
+        <BasicDropdown @horizontalPosition="right" as |dd|>
+          <dd.Trigger class="btn bg-default">
+            <i class="icon icon-chevron-down"></i>
+          </dd.Trigger>
+          <dd.Content class="principal-search-list">
+            <li
+              role="presentation"
+              class="dropdown-header"
+              {{action dd.actions.close}}
+            >
+              {{dropdownLabel}}
+            </li>
             {{#each dropdownChoices as |item|}}
-              <li>
+              <li {{action dd.actions.close}}>
                 <a {{action "addObject" item}}>
                   {{identity-block principal=item}}
                 </a>
               </li>
             {{/each}}
-        </ul>
+          </dd.Content>
+        </BasicDropdown>
       {{/if}}
     </div>
   </div>

@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
+$body-bg                             : white !default;
 
 /// Regular font family
 /// @type List
@@ -22,6 +23,7 @@ $success                  : #27AA5E !default;
 $warning                  : #F1C40F !default;
 $error                    : #F15354 !default;
 $info                     : #78C9CF !default;
+$disabled                 : #dee1e3 !default;
 
 //Contrast colors
 $contrasted-dark-default  : #3d3d3d !default;
@@ -85,3 +87,33 @@ $healthy-background-color            : #F1F9F5 !default;
 $unhealthy-background-color          : #FEF3F4 !default;
 $healthy-text-color                  : #23A454 !default;
 $unhealthy-text-color                : #EF494A !default;
+
+// Tooltips
+$tooltip-color                       : white !default;
+$tooltip-bg                          : rgba(0,0,0,.9) !default;
+$tooltip-opacity                     : .9 !default;
+$tooltip-arrow-color                 : $tooltip-bg !default;
+
+
+//table variables
+$table-bg              : lighten($light-grey,5)!default;
+$table-header          : $body-bg !default;
+$table-nested-header   : lighten($mid-grey, 32)!default;
+$table-bg-accent       : darken($light-grey, .5)!default;
+$table-bg-hover        : lighten($info, 15)!default;
+$table-bg-active       : $table-bg-hover!default;
+$table-bg-selected     : lighten($info, 32)!default;
+$table-border-color    : lighten($mid-grey, 30)!default;
+$table-body-separation : 25px;
+$group-row-height      : 50px;
+
+// banners
+$banner-default                      : lighten($light-grey, 5) !default;
+$banner-disabled                     : lighten($mid-grey, 35) !default;
+$banner-primary                      : lighten($primary, 63) !default;
+$banner-secondary                    : lighten($secondary, 65) !default;
+$banner-success                      : lighten($success, 55) !default;
+$banner-info                         : lighten($info, 30) !default;
+$banner-warning                      : lighten($warning, 45) !default;
+$banner-error                        : lighten($error, 35) !default;
+$banner-color                        : $secondary !default;

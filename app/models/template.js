@@ -1,46 +1,87 @@
 import { htmlSafe } from '@ember/string';
-import { computed } from '@ember/object';
+import { computed, get } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Resource from 'ember-api-store/models/resource';
+import Resource from '@rancher/ember-api-store/models/resource';
 import C from 'ui/utils/constants';
+import { reference } from '@rancher/ember-api-store/utils/denormalize';
+import { compare as compareVersion } from 'ui/utils/parse-version';
 
 const Template = Resource.extend({
-  scope: service(),
+  scope:    service(),
   settings: service(),
-  intl: service(),
+  intl:     service(),
 
-  headers: function() {
-    return {
-      [C.HEADER.PROJECT_ID]: this.get('projects.current.id')
-    };
-  }.property('project.current.id'),
+  catalogRef:     reference('catalogId'),
+  clusterCatalog: reference('clusterCatalogId', 'clusterCatalog', 'store'),
+  projectCatalog: reference('projectCatalogId'),
+
+  latestVersion:  computed('versionLinks', function() {
+    const  links = get(this, 'versionLinks');
+
+    return get(Object.keys(links || {}).sort((a, b) => compareVersion(a, b)), 'lastObject');
+  }),
+
+  isGlobalCatalog:  computed('clusterCatalog', 'projectCatalog', function() {
+    if (!this.clusterCatalog && !this.projectCatalog) {
+      return true;
+    } else {
+      return false;
+    }
+  }),
+
+  isIstio: computed('labels', function() {
+    const labels = get(this, 'labels') || {};
+
+    return labels[C.LABEL_ISTIO_RULE] === 'true';
+  }),
+
+  displayCatalogId: computed('catalogRef', 'clusterCatalog', 'projectCatalog', function() {
+    const {
+      catalogRef, clusterCatalog, projectCatalog, clusterCatalogId, catalogId, projectCatalogId
+    } = this;
+
+    let out = '';
+
+    if ( catalogRef && catalogRef.name ) {
+      out = catalogRef.name;
+    } else if ( clusterCatalog && clusterCatalog.name ) {
+      out = clusterCatalog.name;
+    } else if ( projectCatalog && projectCatalog.name ) {
+      out = projectCatalog.name;
+    } else if ( catalogId ) {
+      out = catalogId;
+    } else if ( clusterCatalogId ) {
+      out = clusterCatalogId.substr(clusterCatalogId.indexOf(':') + 1)
+    } else if ( projectCatalogId ) {
+      out = projectCatalogId;
+    }
+
+    return out;
+  }),
+
+  headers: computed('project.current.id', 'projects.current.id', function() {
+    return { [C.HEADER.PROJECT_ID]: get(this, 'projects.current.id') };
+  }),
 
   cleanProjectUrl: computed('links.project', function() {
-    let projectUrl = this.get('links.project');
-    let pattern = new RegExp('^([a-z]+://|//)', 'i');
+    let projectUrl = get(this, 'links.project');
+    let pattern    = new RegExp('^([a-z]+://|//)', 'i');
 
     if (projectUrl) {
       if (!pattern.test(projectUrl)) {
-        projectUrl = `http://${projectUrl}`;
+        projectUrl = `http://${ projectUrl }`;
       }
     }
 
     return htmlSafe(projectUrl);
   }),
 
-  supportsOrchestration(orch) {
-    orch = orch.replace(/.*\*/,'');
-    if ( orch === 'k8s' ) {
-      orch = 'kubernetes';
-    }
-    let list = ((this.get('labels')||{})[C.LABEL.ORCHESTRATION_SUPPORTED]||'').split(/\s*,\s*/).filter((x) => x.length > 0);
-    return list.length === 0 || list.includes(orch);
-  },
+  categoryArray: computed('category', 'categories.[]', function() {
+    let out = get(this, 'categories');
 
-  categoryArray: function() {
-    let out = this.get('categories');
     if ( !out || !out.length ) {
-      let single = this.get('category');
+      let single = get(this, 'category');
+
       if ( single ) {
         out = [single];
       } else {
@@ -49,81 +90,79 @@ const Template = Resource.extend({
     }
 
     return out;
-  }.property('category','categories.[]'),
+  }),
 
-  categoryLowerArray: function() {
-    return this.get('categoryArray').map(x => (x||'').underscore().toLowerCase());
-  }.property('categoryArray.[]'),
+  categoryLowerArray: computed('categoryArray.[]', function() {
+    return get(this, 'categoryArray').map((x) => (x || '').underscore().toLowerCase());
+  }),
 
-  supported: function() {
-    let orch = this.get('projects.current.orchestration')||'cattle';
-    if ( this.get('categoryLowerArray').includes('orchestration') ) {
-      return orch === 'cattle';
-    } else {
-      return this.supportsOrchestration(orch);
-    }
-  }.property('labels','projects.current.orchestration'),
-
-
-  certifiedType: function() {
+  certifiedType: computed('catalogId', 'labels', function() {
     let str = null;
-    let labels = this.get('labels');
+    let labels = get(this, 'labels');
+
     if ( labels && labels[C.LABEL.CERTIFIED] ) {
       str = labels[C.LABEL.CERTIFIED];
     }
 
-    if ( str === C.LABEL.CERTIFIED_RANCHER && this.get('catalogId') === C.CATALOG.LIBRARY_KEY ) {
+    if ( str === C.LABEL.CERTIFIED_RANCHER && get(this, 'catalogId') === C.CATALOG.LIBRARY_KEY ) {
       return 'rancher';
     } else if ( str === C.LABEL.CERTIFIED_PARTNER ) {
       return 'partner';
     } else {
       return 'thirdparty';
     }
-  }.property('catalogId'),
+  }),
 
-  certifiedClass: function() {
-    let type = this.get('certifiedType');
-    if ( type === 'rancher' && this.get('settings.isRancher') ) {
+  certifiedClass: computed('certifiedType', 'settings.isRancher', function() {
+    let type = get(this, 'certifiedType');
+
+    if ( type === 'rancher' && get(this, 'settings.isRancher') ) {
       return 'badge-rancher-logo';
     } else {
-      return 'badge-' + type;
+      return `badge-${  type }`;
     }
-  }.property('certifiedType'),
+  }),
 
-  certified: function() {
+  certified: computed('catalogId', 'certifiedType', 'intl.locale', 'labels', 'settings.isRancher', function() {
     let out = null;
-    let labels = this.get('labels');
+    let labels = get(this, 'labels');
+
     if ( labels && labels[C.LABEL.CERTIFIED] ) {
       out = labels[C.LABEL.CERTIFIED];
     }
 
     let looksLikeCertified = false;
+
     if ( out ) {
-      let display = this.get('intl').t('catalogPage.index.certified.rancher.rancher');
+      let display = get(this, 'intl').t('catalogPage.index.certified.rancher.rancher');
+
       looksLikeCertified = normalize(out) === normalize(display);
     }
 
-    if ( this.get('catalogId') !== C.CATALOG.LIBRARY_KEY && (out === C.LABEL.CERTIFIED_RANCHER || looksLikeCertified) ) {
+    if ( get(this, 'catalogId') !== C.CATALOG.LIBRARY_KEY && (out === C.LABEL.CERTIFIED_RANCHER || looksLikeCertified) ) {
       // Rancher-certified things can only be in the library catalog.
       out = null;
     }
 
     // For the standard labels, use translations
-    if ( [C.LABEL.CERTIFIED_RANCHER,C.LABEL.CERTIFIED_PARTNER].includes(out) ) {
+    if ( [C.LABEL.CERTIFIED_RANCHER, C.LABEL.CERTIFIED_PARTNER, C.LABEL.CERTIFIED_RANCHER_EXPERIMENTAL].includes(out) ) {
       let pl = 'pl';
-      if ( this.get('settings.isRancher') ) {
+
+      if ( get(this, 'settings.isRancher') ) {
         pl = 'rancher';
       }
-      return this.get('intl').t('catalogPage.index.certified.'+pl+'.'+out);
+
+      return get(this, 'intl').t(`catalogPage.index.certified.${ pl }.${ out }`);
     }
 
     // For custom strings, use what they said.
     return out;
-  }.property('certifiedType','catalogId','labels'),
+  }),
+
 });
 
 function normalize(str) {
-  return (str||'').replace(/[^a-z]/gi,'').toLowerCase();
+  return (str || '').replace(/[^a-z]/gi, '').toLowerCase();
 }
 
 export default Template;

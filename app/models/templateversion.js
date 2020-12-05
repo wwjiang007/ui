@@ -1,33 +1,137 @@
 import { inject as service } from '@ember/service';
-import Resource from 'ember-api-store/models/resource';
+import { validateChars, validateLength } from '@rancher/ember-api-store/utils/validate';
+import Resource from '@rancher/ember-api-store/models/resource';
+import { get, computed } from '@ember/object';
+import { evaluate } from 'shared/utils/evaluate';
 import C from 'ui/utils/constants';
+import jsyaml from 'js-yaml';
+import flatMap from 'shared/utils/flat-map';
+import { isEmpty } from '@ember/utils';
+
+const {
+  HELM_VERSION_2:       helmV2,
+  HELM_VERSION_3:       helmV3,
+  HELM_VERSION_3_SHORT: helmV3Short,
+} = C.CATALOG;
 
 export default Resource.extend({
   scope: service(),
+  intl:  service(),
 
-  headers: function() {
-    return {
-      [C.HEADER.PROJECT_ID]: this.get('scope.currentProject.id')
-    };
-  }.property('project.current.id'),
+  isHelm3: computed('helmVersion', function() {
+    const { helmVersion = helmV2 } = this;
 
-  filesAsArray: function() {
-    var obj = (this.get('files')||{});
+    if (helmVersion === helmV3 || helmVersion === helmV3Short) {
+      return true;
+    }
+
+    return false;
+  }),
+
+  headers: computed('project.current.id', 'scope.currentProject.id', function() {
+    return { [C.HEADER.PROJECT_ID]: get(this, 'scope.currentProject.id') };
+  }),
+
+  filesAsArray: computed('files', function() {
+    var obj = (get(this, 'files') || {});
     var out = [];
 
     Object.keys(obj).forEach((key) => {
-      out.push({name: key, body: obj[key]});
+      out.push({
+        name: key,
+        body: obj[key]
+      });
     });
 
     return out;
-  }.property('files'),
+  }),
 
-  supportsOrchestration(orch) {
-    orch = orch.replace(/.*\*/,'');
-    if ( orch === 'k8s' ) {
-      orch = 'kubernetes';
+  allQuestions: computed('questions', function() {
+    const out = [];
+    const originQuestions = get(this, 'questions') || [];
+
+    originQuestions.forEach((q) => {
+      out.push(q);
+      const subquestions = get(q, 'subquestions');
+
+      if ( subquestions ) {
+        subquestions.forEach((subq) => {
+          if ( get(subq, 'showIf.length') > 0 ) {
+            subq.showIf = `${ q.variable }=${ q.showSubquestionIf }&&${ subq.showIf }`;
+          } else {
+            subq.showIf = `${ q.variable }=${ q.showSubquestionIf }`;
+          }
+
+          if ( q.group ) {
+            subq.group = q.group;
+          }
+        });
+        out.pushObjects(subquestions);
+      }
+    });
+
+    return out;
+  }),
+
+  validationErrors(answersMap) {
+    const {
+      intl, allQuestions, valuesYaml
+    } = this;
+
+    const filteredQuestions = allQuestions.filter((q) => evaluate(q, allQuestions));
+    let errors              = [];
+    let parsedYamlAnswers   = null;
+
+    if (valuesYaml) {
+      try {
+        parsedYamlAnswers = jsyaml.safeLoad(valuesYaml);
+      } catch ( err ) {
+        return [err];
+      }
+
+      if (parsedYamlAnswers) {
+        let flatParsed = flatMap(parsedYamlAnswers);
+
+        Object.keys(flatParsed).forEach((fp) => {
+          let questionMatch = filteredQuestions.findBy('variable', fp);
+
+          if (questionMatch) {
+            let answer = flatParsed[fp] || null;
+
+            if ( questionMatch.required && questionMatch.type !== 'boolean' && isEmpty(answer) ) {
+              errors.push(intl.t('validation.required', { key: questionMatch.label }));
+            }
+
+            if (answer) {
+              validateLength(answer, questionMatch, questionMatch.label, intl, errors);
+              validateChars(answer, questionMatch, questionMatch.label, intl, errors);
+            }
+          }
+        });
+      }
+    } else {
+      if ( filteredQuestions ) {
+        filteredQuestions.forEach((item) => {
+          if ( item.required && item.type !== 'boolean' && isEmpty(answersMap[item.variable]) ) {
+            errors.push(intl.t('validation.required', { key: item.label }));
+          }
+
+          if ( item.answer ) {
+            validateLength(item.answer, item, item.label, intl, errors);
+            validateChars(item.answer, item, item.label, intl, errors);
+          }
+        });
+      }
     }
-    let list = ((this.get('labels')||{})[C.LABEL.ORCHESTRATION_SUPPORTED]||'').split(/\s*,\s*/).filter((x) => x.length > 0);
-    return list.length === 0 || list.includes(orch);
+
+
+    if ( errors.length > 0 ) {
+      return errors;
+    }
+
+    errors = this._super(...arguments);
+
+    return errors;
   },
+
 });

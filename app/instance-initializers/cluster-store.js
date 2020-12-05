@@ -9,6 +9,7 @@ export function initialize(instance) {
   clusterStore.baseUrl = application.clusterEndpoint;
 
   let timeout = cookies.get('timeout');
+
   if ( timeout ) {
     clusterStore.defaultTimeout = timeout;
   }
@@ -16,5 +17,5 @@ export function initialize(instance) {
 
 export default {
   name: 'cluster-store',
-  initialize: initialize
+  initialize
 };

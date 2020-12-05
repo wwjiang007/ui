@@ -6,5 +6,5 @@ export function initialize(application) {
 
 export default {
   name: 'inject-application',
-  initialize: initialize
+  initialize
 };

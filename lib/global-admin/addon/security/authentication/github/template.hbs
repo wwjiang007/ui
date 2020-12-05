@@ -1,22 +1,12 @@
 <section>
-  {{#if isEnabled }}
-    <h3>{{t 'authPage.github.header.enabled.label' github=(t providerName)}}</h3>
-    <hr/>
-  {{else}}
+  {{#unless isEnabled}}
     <div class="banner bg-warning">
       <div class="banner-icon"><span class="icon icon-alert"></span></div>
       <div class="banner-message">
         <p>{{t 'authPage.github.header.disabled.label'}}</p>
-       </div>
+      </div>
     </div>
-  {{/if}}
-  <div>
-    {{#if isEnabled}}
-      <p>{{t (concat 'authPage.github.header.enabled.' githubConfig.accessMode) appName=settings.appName github=(t providerName) users=numUsers orgs=numOrgs}}</p>
-    {{else}}
-      <p>{{t 'authPage.github.header.disabled.warning' appName=settings.appName}}</p>
-    {{/if}}
-  </div>
+  {{/unless}}
   {{top-errors errors=errors}}
 </section>
 
@@ -33,16 +23,16 @@
       <section class="">
         <div class="clearfix">
           <div class="pull-right">
-            <button class="btn btn-sm right-divider-btn bg-error" {{action "disable"}}>
+            <button class="btn btn-sm right-divider-btn bg-error" type="button" {{action "disable"}}>
               {{t 'authPage.github.authenticated.disableAccess.disable'}}
             </button>
           </div>
         </div>
         <hr/>
         {{#if isEnterprise }}
-          <div><b>{{t 'authPage.github.authenticated.header.enterpriseHostName'}} </b> <span class="text-muted">{{githubConfig.hostname}}</span></div>
+          <div><b>{{t 'authPage.github.authenticated.header.enterpriseHostName'}} </b> <span class="text-muted">{{authConfig.hostname}}</span></div>
         {{/if}}
-        <div><b>{{t 'authPage.github.authenticated.header.clientId.text'}} </b> <span class="text-muted">{{githubConfig.clientId}}</span></div>
+        <div><b>{{t 'authPage.github.authenticated.header.clientId.text'}} </b> <span class="text-muted">{{authConfig.clientId}}</span></div>
       </section>
     {{/accordion-list-item}}
 
@@ -57,7 +47,7 @@
          title=(t 'siteAccess.header')
     }}
       {{site-access
-          model=githubConfig
+          model=authConfig
           principals=model.principals
           collection='siteAccess.organizations'
       }}
@@ -114,7 +104,7 @@
             <div class="col span-6">
               <div class="inline-form">
                 <label class="acc-label pb-5">{{t 'authPage.github.notAuthenticated.form.clientId.labelText'}}{{field-required}}</label>
-                {{input type="text" name="username" value=githubConfig.clientId classNames="form-control"}}
+                {{input type="text" name="username" value=authConfig.clientId classNames="form-control"}}
                 <p class="help-block">{{t 'authPage.github.notAuthenticated.form.subtext'}}</p>
 
               </div>
@@ -122,7 +112,7 @@
             <div class="col span-6">
               <div class="inline-form">
                 <label class="acc-label pb-5">{{t 'authPage.github.notAuthenticated.form.clientSecret.labelText'}}{{field-required}}</label>
-                {{input type="password" name="password" value=githubConfig.clientSecret classNames="form-control"}}
+                {{input type="password" name="password" value=authConfig.clientSecret classNames="form-control"}}
               </div>
               <div class="checkbox pt-10">
                 <label class="acc-label pb-5">{{input type="checkbox" checked=isEnterprise}} {{t 'authPage.github.notAuthenticated.form.ghEnterprise.labelText'}} (disabled)</label>
@@ -134,14 +124,14 @@
               {{/liquid-if}}
               {{#liquid-if isEnterprise}}
                 <label class="acc-label pb-5">{{t 'authPage.github.notAuthenticated.form.enterpriseHost.labelText'}}{{field-required}}</label>
-                {{input type="text" value=githubConfig.hostname classNames="form-control" placeholder=(t 'authPage.github.notAuthenticated.form.enterpriseHost.placeholder')}}
+                {{input type="text" value=authConfig.hostname classNames="form-control" placeholder=(t 'authPage.github.notAuthenticated.form.enterpriseHost.placeholder')}}
               {{/liquid-if}}
             </div>
           </div>
 
-          <div class="row">
-            <div class="inline-form">
-              <button class="btn bg-primary" style="display: block;margin: 0 auto;" {{action "save"}}>
+          <div class="row text-center">
+            <div class="btn-group">
+              <button class="btn bg-primary" type="button" {{action "save"}}>
                 {{#if saving}}
                   <i class="icon icon-spinner icon-spin"></i> {{t 'authPage.github.testAuth.buttonText.post'}}
                 {{else if doneSaving}}
@@ -150,6 +140,7 @@
                   <i class="icon icon-github"></i> {{t 'authPage.github.testAuth.buttonText.pre'}}
                 {{/if}}
               </button>
+              <button class="btn bg-transparent" type="button" {{action "cancel"}}>{{t 'saveCancel.cancel'}}</button>
             </div>
           </div>
         </section>

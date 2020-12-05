@@ -5,21 +5,13 @@
     "ember-engine"
   ],
   "dependencies": {
-    "ember-math-helpers": "*",
-    "ember-truth-helpers": "*",
+    "ember-auto-import": "*",
     "ember-intl": "*",
     "ember-cli": "*",
     "ember-cli-htmlbars": "*",
     "ember-cli-babel": "*",
-    "ember-cli-clipboard": "*",
     "ember-href-to": "*",
-    "ember-browserify": "*",
-    "ember-cli-babel": "*",
-    "ember-cli-htmlbars": "*",
-    "ember-drag-drop": "*",
-    "ember-intl": "*",
-    "ember-truth-helpers": "*",
-    "prettycron": "*"
+    "ember-drag-drop": "*"
   },
   "ember-addon": {
     "paths": [

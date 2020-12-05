@@ -9,6 +9,7 @@ export function initialize(instance) {
   store.baseUrl = application.apiEndpoint;
 
   let timeout = cookies.get('timeout');
+
   if ( timeout ) {
     store.defaultTimeout = timeout;
   }
@@ -16,5 +17,5 @@ export function initialize(instance) {
 
 export default {
   name: 'global-store',
-  initialize: initialize
+  initialize
 };

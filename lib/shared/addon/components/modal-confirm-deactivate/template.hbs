@@ -1,5 +1,26 @@
 <div class="protip">{{t 'modalConfirmDeactivate.protip' key=alternateLabel isServiceButton=isService.button}}</div>
 <hr>
+
+{{#if isClusterDriver}}
+  <div class="mb-20 mt-20">
+    {{#banner-message
+      color="bg-warning m-0"
+    }}
+      {{t "modalConfirmDeactivate.clusterDriver"}}
+    {{/banner-message}}
+  </div>
+{{/if}}
+
+{{#if isNodeDriver}}
+  <div class="mb-20 mt-20">
+    {{#banner-message
+      color="bg-warning m-0"
+    }}
+      {{t "modalConfirmDeactivate.nodeDriver"}}
+    {{/banner-message}}
+  </div>
+{{/if}}
+
 <div class="container-header-text">
   {{t 'modalConfirmDeactivate.header'}} {{isService.message}}:
   <div class="display-name">
@@ -9,6 +30,6 @@
 
 
 <div class="footer-actions">
-  <button {{action "confirm"}} class="btn bg-error">{{isService.button}}</button>
-  <button {{action "cancel"}} class="btn bg-transparent">{{t 'modalConfirmDeactivate.cancel'}}</button>
+  <button class="btn bg-error" type="button" {{action "confirm"}}>{{isService.button}}</button>
+  <button class="btn bg-transparent" type="button" {{action "cancel"}}>{{t 'modalConfirmDeactivate.cancel'}}</button>
 </div>

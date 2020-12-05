@@ -2,28 +2,35 @@
   <i class="icon icon-terminal"></i> {{t 'modalShell.title'}}
   {{#if displayName}}
     {{displayName}}
-  {{else if (gt instance.containers.length 1)}}
+  {{else if (gt runningContainers.length 1)}}
     <div class="container-select">
       {{new-select
         classNames="form-control"
         optionValuePath="name"
         optionLabelPath="name"
-        content=instance.containers
+        content=runningContainers
         value=containerName
       }}
     </div>
   {{else}}
      {{containerName}}
   {{/if}}
-  <div class="console-status text-muted pull-right">{{t (concat 'containerShell.status.' status) error=error}}</div>
+  <div class="console-status pull-right">
+    <span class="{{if (eq status 'connecting') 'text-warning' ''}}">
+      {{t (concat 'containerShell.status.' status) error=error}}
+      {{#if statusCode}}
+        {{t 'containerShell.status.code' code=statusCode}}
+      {{/if}}
+    </span>
+  </div>
 </h2>
 {{#if showProtip}}
   <div class="protip">
     {{t 'containerShell.protip' key=alternateLabel}}
   </div>
 {{/if}}
-<div class="shell-container">
-  <div class="shell-body" contenteditable="{{contenteditable}}" oncontextmenu={{action "contextMenuHandler"}}>
+<div class="shell-container {{if (eq status 'closed') 'shell-close-bg'}}">
+  <div class="shell-body {{if (eq status 'closed') 'shell-close-bg'}}" contenteditable="{{contenteditable}}" oncontextmenu={{action "contextMenuHandler"}}>
   </div>
 </div>
 {{#if hasBlock}}

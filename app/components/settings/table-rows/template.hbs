@@ -1,0 +1,14 @@
+<h2>
+  {{t "tableCountSelect.header"}}
+</h2>
+<div class="box">
+  <div class="row">
+    {{new-select
+      classNames="form-control"
+      optionValuePath="value"
+      optionLabelPath="value"
+      content=tableCounts
+      value=selectedCount
+    }}
+  </div>
+</div>

@@ -1,6 +1,9 @@
 ---
 languageName: "Svenska"
 languageContribute: "Hjälpa till att översätta Rancher"
+##############################
+#Really generic things used in multiple places (use sparingly)
+##############################
 generic:
   actions: Åtgärder
   activate: Aktivera
@@ -72,6 +75,9 @@ realmNames:
   asia: Asien
   euWest: Västra EU
   euEast: Östra EU
+##############################
+#Routes
+##############################
 accountsPage:
   index:
     table:
@@ -101,7 +107,6 @@ apiPage:
 authPage:
   shibboleth:
     enabled:
-      header: "{providerName} är aktiverad"
       authenticated:
         header:
           text: Autentisering
@@ -124,14 +129,10 @@ authPage:
           post: Väntar på svar från IDP
     providerName:
       shibboleth: Schibbolet
-  root:
-    header: Access Control
   github:
     standard: GitHub
     enterprise: GitHub Enterprise
     header:
-      enabled:
-        label: "{github} är aktiverad"
       disabled:
         label: GitHub är inte konfigurerad
     authenticated:
@@ -143,7 +144,7 @@ authPage:
     notAuthenticated:
       ul:
         li3:
-          text: 'Klicka på "Registrera Applikation" '
+          text: 'Klicka på "Registrera Applikation"'
       form:
         clientId:
           labelText: Klient-ID
@@ -161,15 +162,6 @@ authPage:
         pre: Autentisera med GitHub
         post: Väntar på att höra från GitHub
   azuread:
-    header:
-      enabled: 'Azure AD autentisering är <b>aktiverad</b>'
-    subtext:
-      enabled: '{appName} är konfigurerad för att tillåta åtkomst till konton i Azure AD'
-    configure:
-      clientId:
-        label: Klient-ID
-      domain:
-        label: Domän
     test:
       username:
         placeholder: 't.ex. asvensson'
@@ -187,7 +179,6 @@ authPage:
           placeholder: 't.ex. Anders Svensson'
         password:
           labelText: Lösenord
-  0: ""
 catalogPage:
   index:
     certified:
@@ -208,6 +199,9 @@ containersPage:
     sparkPrefixMemory: "Minne: "
     sparkPrefixNetwork: "Nätverk: "
     sparkPrefixStorage: "Lagring: "
+#If you change translations here also change the translation in app/utils/constants.js under the FALLBACK_TRANSLATIONS key
+#those are present in case we have an error in the app and can not load the translations file
+#the error page will at least make a little sense
 failWhalePage:
   header: Fel
 haPage:
@@ -255,6 +249,9 @@ servicePage:
     image: 'Bild:'
   linksTab:
     header: Länkar
+##############################
+#Partials
+##############################
 ldap:
   accessEnabled:
     general:
@@ -405,10 +402,6 @@ formUserLabels:
   value:
     label: Värde
     placeholder: t.ex. bar
-infoMultiStats:
-  cpuSection:
-    labelText: CPU
-    user: Användare
 inputPassword:
   buttonText: Generera
 loginUserPass:
@@ -428,8 +421,11 @@ modalProcessError:
   none: N/A
 newCatalog:
   saveUpgrade: Uppgradera
-newContainer:
-  saveUpgrade: Uppgradera
+nodeDriver:
+  amazoneks:
+    associateWorkerNodePublicIp:
+      radio:
+        default: "true"
 pageFooter:
   forums: Forum
 projectRow:
@@ -455,11 +451,17 @@ schedulingRuleRow:
 siteAccess:
   users: Användare
   groups: Grupper
+##############################
+#Mixins
+##############################
 containerChoices:
   hostGroup: "Värd: {name}"
   hostGroupWithState: "Värd: {name} ({state})"
   unknownHost: "Värd: ???"
   containerOption: "{name}"
+##############################
+#Navigation
+##############################
 nav:
   catalog:
     all: Alla
@@ -468,11 +470,17 @@ nav:
     storagePage: Lagring
   user:
     logout: Logga ut
+##############################
+#Resource Actions
+##############################
 action:
   remove: Ta bort
   restart: Starta om
   retry: Försök igen
   upgrade: Uppgradera
+##############################
+#Model Properties
+##############################
 model:
   account:
     kind:

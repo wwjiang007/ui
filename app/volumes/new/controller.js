@@ -7,7 +7,7 @@ export default Controller.extend({
     },
 
     cancel() {
-      this.send('goToPrevious','volumes.index');
+      this.send('goToPrevious', 'volumes.index');
     },
   },
 });

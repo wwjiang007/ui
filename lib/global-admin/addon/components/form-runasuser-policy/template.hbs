@@ -28,15 +28,6 @@
 
   {{#if (eq model.runAsUser.rule "MustRunAs")}}
     <div class="row mt-20">
-      {{#unless readOnly}}
-        <div>
-          <button class="btn bg-link icon-btn" {{action "add"}}>
-            <span class="darken"><i class="icon icon-plus text-small"/></span>
-            <span>{{t 'formRunAsUserPodSecurityPolicy.range.addLabel'}}</span>
-          </button>
-        </div>
-      {{/unless}}
-
       {{#if (eq model.runAsUser.rule "MustRunAs")}}
         <table class="table fixed no-lines no-top-padding mt-10">
           <tr class="hidden-sm hidden-xs">
@@ -58,13 +49,22 @@
               </td>
               <td class="text-right">
                 {{#unless readOnly}}
-                  <button class="btn bg-primary btn-sm" {{action "remove" range}}><i class="icon icon-minus"/><span class="sr-only">{{t 'generic.remove'}}</span></button>
+                  <button class="btn bg-primary btn-sm" type="button" {{action "remove" range}}><i class="icon icon-minus"/><span class="sr-only">{{t 'generic.remove'}}</span></button>
                 {{/unless}}
               </td>
             </tr>
           {{/each}}
         </table>
       {{/if}}
+
+      {{#unless readOnly}}
+        <div>
+          <button class="btn bg-link icon-btn" type="button" {{action "add"}}>
+            <span class="darken"><i class="icon icon-plus text-small"/></span>
+            <span>{{t 'formRunAsUserPodSecurityPolicy.range.addLabel'}}</span>
+          </button>
+        </div>
+      {{/unless}}
     </div>
   {{/if}}
 

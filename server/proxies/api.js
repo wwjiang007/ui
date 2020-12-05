@@ -1,55 +1,89 @@
+/* eslint-env node */
+
+const path = require('path');
+const HttpProxy = require('http-proxy');
+
+const config = require('../../config/environment')(process.env.EMBER_ENV).APP;
+
 module.exports = function(app, options) {
-  var path = require('path');
-  var ForeverAgent = require('forever-agent');
-  var HttpProxy = require('http-proxy');
   var httpServer = options.httpServer;
 
-  var config = require('../../config/environment')().APP;
 
-  var target = config.apiServer;
-
-  var proxy = HttpProxy.createProxyServer({
+  const proxy = HttpProxy.createProxyServer({
     ws: true,
     xfwd: false,
-    target: target,
+    target: config.apiServer,
     secure: false,
+    followRedirects: true,
   });
 
   proxy.on('error', onProxyError);
 
   // WebSocket for Rancher
-  httpServer.on('upgrade', function proxyWsRequest(req, socket, head) {
-    proxyLog('WS', req);
-    if ( socket.ssl ) {
-      req.headers['X-Forwarded-Proto'] = 'https';
+  httpServer.on('upgrade', (req, socket, head) => {
+    socket.on('error', (err)=> console.error(err));
+    if ( req.url.startsWith('/_lr/') ) {
+      return;
     }
-    proxy.ws(req, socket, head);
+
+    let targetHost = config.apiServer.replace(/^https?:\/\//, '');
+    let host = req.headers['host'];
+
+    req.headers['x-api-host'] = host;
+    req.headers['host']       = targetHost;
+    req.headers['origin']     = config.apiServer;
+    req.socket.servername     = targetHost;
+
+    proxyLog('WS', req);
+
+    try {
+      proxy.ws(req, socket, head);
+    } catch (err) {
+      proxyLog(err);
+    }
   });
 
   let map = {
-    'Project': config.projectEndpoint.replace(config.projectToken, ''),
-    'Cluster': config.clusterEndpoint.replace(config.clusterToken, ''),
-    'Global':  config.apiEndpoint,
-    'Public':  config.publicApiEndpoint,
-    'Magic': config.magicEndpoint,
+    'Project':      config.projectEndpoint.replace(config.projectToken, ''),
+    'Cluster':      config.clusterEndpoint.replace(config.clusterToken, ''),
+    'Global':       config.apiEndpoint,
+    'Public':       config.publicApiEndpoint,
+    'Magic':        config.magicEndpoint,
+    'Telemetry':    config.telemetryEndpoint,
 
-    // @TODO-2.0
-    'Telemetry': config.telemetryEndpoint,
-    'WebHook': config.webhookEndpoint,
-
-    'K8s': '/k8s',
-    'Meta': '/meta',
-    'Swagger': '/swaggerapi',
-    'Version': '/version',
+    'K8s':          '/k8s',
+    'Meta':         '/meta',
+    'Swagger':      '/swaggerapi',
+    'Version':      '/version',
+    'Apiui':        '/api-ui',
+    'Samlauth':     '/v1-saml',
+    'Drivers':      '/assets/rancher-ui-driver-*',
+    'K3Versions':   '/v1-k3s-release/release',
+    'Rke2Versions': '/v1-rke2-release/release',
   }
 
-  console.log('Proxying APIs to', target);
+  app.use('/', function(req, res, next) {
+    if ( (req.headers['user-agent']||'').toLowerCase().includes('mozilla') ) {
+      next();
+    } else {
+      proxyLog('Root', req);
+      req.headers['X-Forwarded-Proto'] = req.protocol;
+      proxy.web(req, res);
+    }
+  }),
+
+  console.log('Proxying APIs to', config.apiServer);
   Object.keys(map).forEach(function(label) {
     let base = map[label];
     app.use(base, function(req, res, next) {
+      if ( req.url === '/' ) {
+        req.url = '';
+      }
+
       // include root path in proxied request
-      req.url = path.join(base, req.url);
-      req.headers['X-Forwarded-Proto'] = req.protocol;
+      req.url                   = req.originalUrl;
+      req.headers['X-Api-Host'] = req.headers['host'];
+      delete req.headers['host'];
 
       proxyLog(label, req);
       proxy.web(req, res);
@@ -79,5 +113,9 @@ function onProxyError(err, req, res) {
 }
 
 function proxyLog(label, req) {
-  console.log('['+ label+ ']', req.method, req.url);
+  console.log(`[${ label }]`, req.method, req.url);
+}
+
+function proxyError(label, req, err) {
+  console.error(`[${ label }][${ req._source }]`, req.method, req.url, err);
 }

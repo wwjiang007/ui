@@ -1,4 +1,4 @@
-import Resource from 'ember-api-store/models/resource';
+import Resource from '@rancher/ember-api-store/models/resource';
 
 export default Resource.extend({
   type: 'googleKubernetesEngineConfig',
@@ -7,6 +7,7 @@ export default Resource.extend({
 
   validationErrors() {
     let errors = [];
+
     if (!this.get('credential')) {
       errors.push('"Service Account" is required');
     } else if (!this.get('projectId')){
@@ -16,6 +17,7 @@ export default Resource.extend({
       return errors;
     }
     errors = this._super(...arguments);
+
     return errors;
   },
 });

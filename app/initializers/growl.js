@@ -7,5 +7,5 @@ export function initialize(application) {
 
 export default {
   name: 'growl',
-  initialize: initialize
+  initialize
 };

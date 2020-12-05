@@ -3,12 +3,12 @@ import { get, set } from '@ember/object'
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  model: function (params) {
+  model(params) {
     const store = get(this, 'store');
 
     const dependencies = {
       namespacedcertificates: store.findAll('namespacedcertificate'),
-      certificates: store.findAll('certificate'),
+      certificates:           store.findAll('certificate'),
     };
 
     if (params.ingressId) {
@@ -17,8 +17,9 @@ export default Route.extend({
 
     return hash(dependencies).then((hash) => {
       let ingress;
+
       if (hash.existingIngress) {
-        if (params.upgrade + '' === 'true') {
+        if (`${ params.upgrade  }` === 'true') {
           ingress = hash.existingIngress.clone();
           hash.existing = hash.existingIngress;
         } else {
@@ -27,18 +28,19 @@ export default Route.extend({
         delete hash.existingIngress;
       } else {
         ingress = store.createRecord({
-          type: 'ingress',
-          name: '',
+          type:  'ingress',
+          name:  '',
           rules: [],
-          tls: [],
+          tls:   [],
         });
       }
       hash.ingress = ingress;
+
       return hash;
     });
   },
 
-  resetController: function (controller, isExisting) {
+  resetController(controller, isExisting) {
     if (isExisting) {
       set(controller, 'ingressId', null);
       set(controller, 'upgrade', null);
@@ -46,7 +48,7 @@ export default Route.extend({
   },
 
   actions: {
-    cancel: function () {
+    cancel() {
       this.goToPrevious();
     },
   }

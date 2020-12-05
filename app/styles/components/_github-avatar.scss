@@ -1,5 +1,5 @@
 $gh-block-color: $text-color;
-$size: 35px;
+$size: 34px;
 
 .gh-block-list {
   margin-bottom: 0;
@@ -15,7 +15,7 @@ $size: 35px;
 
 .gh-block {
   width: calc(100% + #{$size});
-  white-space: nowrap;
+  padding: 5px 0;
 
   .gh-block-content {
     line-height: initial;
@@ -44,6 +44,12 @@ $size: 35px;
 
   &:hover .gh-action {
     display: block;
+  }
+}
+
+.site-access {
+  .gh-block {
+    width: calc(100% + 5px);
   }
 }
 
